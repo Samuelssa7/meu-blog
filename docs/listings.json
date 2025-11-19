@@ -2,8 +2,9 @@
   {
     "listing": "/index.html",
     "items": [
-      "/posts/post-with-code/index.html",
-      "/posts/welcome/index.html"
+      "/posts/monitoramento-da-frota-de-onibus/index.html",
+      "/posts/cotacao-do-dolar/index.html",
+      "/posts/regressao-linear/index.html"
     ]
   }
 ]

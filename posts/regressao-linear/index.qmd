@@ -1,6 +1,6 @@
 ---
-title: "Welcome To My Blog"
-author: "Tristan O'Malley"
+title: "Regressão Linear"
+author: "Samuel Andrey"
 date: "2025-11-16"
 categories: [news]
 ---

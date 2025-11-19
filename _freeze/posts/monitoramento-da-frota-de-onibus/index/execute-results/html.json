@@ -1,0 +1,12 @@
+{
+  "hash": "b90712827737ad4d61fc530718b7c812",
+  "result": {
+    "engine": "jupyter",
+    "markdown": "---\ntitle: \"Monitoramento da Frota de Ônibus\"\nautor: \"Samuel Andrey\"\ndate: \"2025-11-19\"\ncategories: [news, code, analysis]\nimage: \"image.jpg\"\n---\n\nThis is a post with executable code. Ok?\n\n::: {#f320bdfd .cell execution_count=1}\n``` {.python .cell-code}\nn = 10\nprint(n)\n```\n\n::: {.cell-output .cell-output-stdout}\n```\n10\n```\n:::\n:::\n\n\n",
+    "supporting": [
+      "index_files"
+    ],
+    "filters": [],
+    "includes": {}
+  }
+}

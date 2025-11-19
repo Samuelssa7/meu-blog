@@ -3,7 +3,7 @@
 Este projeto é um blog desenvolvido como requisito para um trabalho da faculdade. O objetivo é apresentar soluções para 3 problemas e postar sa soluções com explicações no blog.
 
 ## 🔗 Acesse o Blog Online
-O blog está hospedado no GitHub Pages, Você pode acessar no link abaixo:
+O blog está hospedado no GitHub Pages, Você pode acessar no link abaixo:  
 👉 **[https://samuelssa7.github.io/meu-blog/]**
 
 ---

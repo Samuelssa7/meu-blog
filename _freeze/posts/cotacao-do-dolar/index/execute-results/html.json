@@ -1,0 +1,12 @@
+{
+  "hash": "9d4efc081c0f834cabddca29b0709869",
+  "result": {
+    "engine": "jupyter",
+    "markdown": "---\ntitle: \"Cotação do Dólar\"\nautor: \"Samuel Andrey\"\ndate: \"2025-11-19\"\ncategories: [news, code, analysis]\nimage: \"image.jpg\"\n---\n\nThis is a post with executable code. Ok?\n\n::: {#f51b83d7 .cell execution_count=1}\n``` {.python .cell-code}\nn = 10\nprint(n)\n```\n\n::: {.cell-output .cell-output-stdout}\n```\n10\n```\n:::\n:::\n\n\n",
+    "supporting": [
+      "index_files"
+    ],
+    "filters": [],
+    "includes": {}
+  }
+}
