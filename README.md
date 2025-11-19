@@ -12,9 +12,9 @@ O blog está hospedado no GitHub Pages, Você pode acessar no link abaixo:
 
 As soluções estão organizadas na pasta `posts/`, onde cada problema possui sua própria página com explicação teórica e código executável:
 
-* **Atividade 1:** [Cotação do Dólar por Período]
-* **Atividade 2:** [Monitoramento de Frota de Ônibus]
-* **Atividade 3:** [Regressão linear]
+* **Atividade 1:** Cotação do Dólar por Período
+* **Atividade 2:** Monitoramento de Frota de Ônibus
+* **Atividade 3:** Regressão linear
 
 ## 🛠️ Tecnologias Utilizadas
 
