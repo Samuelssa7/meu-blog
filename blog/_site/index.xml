@@ -13,7 +13,7 @@
 <lastBuildDate>Wed, 19 Nov 2025 03:00:00 GMT</lastBuildDate>
 <item>
   <title>Post With Code</title>
-  <dc:creator>Harlow Malloc</dc:creator>
+  <dc:creator>Samuel Andrey</dc:creator>
   <link>https://your-website-url.example.com/posts/post-with-code/</link>
   <description><![CDATA[ 
 
@@ -21,7 +21,8 @@
 
 
 
-<p>This is a post with executable code.</p>
+<p>This is a post with executable code. Ok?</p>
+<p>n = 10 print(n)</p>
 
 
 
