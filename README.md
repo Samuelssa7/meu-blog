@@ -4,7 +4,7 @@ Este projeto é um blog desenvolvido como requisito para um trabalho da faculdad
 
 ## 🔗 Acesse o Blog Online
 O blog está hospedado no GitHub Pages, Você pode acessar no link abaixo:
-👉 **[]**
+👉 **[https://samuelssa7.github.io/meu-blog/]**
 
 ---
 
