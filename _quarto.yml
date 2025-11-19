@@ -16,8 +16,8 @@ website:
 format:
   html:
     theme:
-      - cosmo
-      - brand
+      light: cosmo
+      dark: superhero
     css: styles.css
 
 
