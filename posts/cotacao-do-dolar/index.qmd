@@ -3,12 +3,59 @@ title: "Cotação do Dólar"
 autor: "Samuel Andrey"
 date: "2025-11-19"
 categories: [news, code, analysis]
-image: "image.jpg"
+image: "image_dolar.jpg"
 ---
 
-This is a post with executable code. Ok?
+Veja a variação do preço do dólar no período de 11/2024 💵💹
 
 ```{python}
-n = 10
-print(n)
+
+
+import calendar
+import requests
+import pandas as pd
+import plotly.express as px
+from datetime import datetime
+
+def gerar_grafico_dolar(data_str):
+    first_date = datetime.strptime(data_str, "%m%Y")
+    last_day = calendar.monthrange(first_date.year, first_date.month)[1]
+    last_date = first_date.replace(day=last_day)
+
+    start_api = first_date.strftime("'%m-%d-%Y'")
+    end_api = last_date.strftime("'%m-%d-%Y'")
+
+    url = f"https://olinda.bcb.gov.br/olinda/servico/PTAX/versao/v1/odata/CotacaoDolarPeriodo(dataInicial={start_api},dataFinalCotacao={end_api})?%24format=json"
+
+    res = requests.get(url)
+    dados_json = res.json()
+
+    if 'value' not in dados_json or len(dados_json['value']) == 0:
+        print("Nenhum dado encontrado.")
+        return
+
+    df = pd.DataFrame(dados_json['value'])
+    df['dataHoraCotacao'] = pd.to_datetime(df['dataHoraCotacao']).dt.normalize()
+    df['cotacaoVenda'] = pd.to_numeric(df['cotacaoVenda'])
+    df = df.set_index('dataHoraCotacao')
+
+    idx_completo = pd.date_range(start=first_date, end=last_date)
+    df_completo = df.reindex(idx_completo)
+    df_completo['cotacaoVenda'] = df_completo['cotacaoVenda'].ffill()
+
+    df_final = df_completo.reset_index()
+    df_final.rename(columns={'index': 'Data', 'cotacaoVenda': 'Valor Dólar (R$)'}, inplace=True)
+
+    fig = px.line(
+        df_final, 
+        x='Data', 
+        y='Valor Dólar (R$)', 
+        title=f'Cotação do Dólar - Período: {data_str}',
+        markers=True
+    )
+    
+    fig.show()
+
+gerar_grafico_dolar("112024")
+
 ```
