@@ -22,252 +22,523 @@
 
 
 <p>Descubra a rota e localização de um ônibus.</p>
-<div id="ee7b2d05" class="cell" data-execution_count="1">
+<div id="bf2464ad" class="cell" data-execution_count="1">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb1" style="background: #f1f3f5;"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><span class="im" style="color: #00769E;
 background-color: null;
-font-style: inherit;">import</span> calendar</span>
+font-style: inherit;">import</span> os</span>
 <span id="cb1-2"><span class="im" style="color: #00769E;
 background-color: null;
 font-style: inherit;">import</span> requests</span>
 <span id="cb1-3"><span class="im" style="color: #00769E;
 background-color: null;
-font-style: inherit;">import</span> pandas <span class="im" style="color: #00769E;
+font-style: inherit;">from</span> folium <span class="im" style="color: #00769E;
 background-color: null;
-font-style: inherit;">as</span> pd</span>
+font-style: inherit;">import</span> Map, Marker, Icon</span>
 <span id="cb1-4"><span class="im" style="color: #00769E;
 background-color: null;
-font-style: inherit;">import</span> plotly.express <span class="im" style="color: #00769E;
+font-style: inherit;">from</span> dotenv <span class="im" style="color: #00769E;
 background-color: null;
-font-style: inherit;">as</span> px</span>
-<span id="cb1-5"><span class="im" style="color: #00769E;
+font-style: inherit;">import</span> load_dotenv</span>
+<span id="cb1-5"></span>
+<span id="cb1-6">load_dotenv(<span class="st" style="color: #20794D;
 background-color: null;
-font-style: inherit;">from</span> datetime <span class="im" style="color: #00769E;
+font-style: inherit;">".env"</span>)</span>
+<span id="cb1-7"></span>
+<span id="cb1-8">s <span class="op" style="color: #5E5E5E;
 background-color: null;
-font-style: inherit;">import</span> datetime</span>
-<span id="cb1-6"></span>
-<span id="cb1-7"><span class="kw" style="color: #003B4F;
+font-style: inherit;">=</span> requests.Session()</span>
+<span id="cb1-9">res <span class="op" style="color: #5E5E5E;
 background-color: null;
-font-weight: bold;
-font-style: inherit;">def</span> gerar_grafico_dolar(data_str):</span>
-<span id="cb1-8">    first_date <span class="op" style="color: #5E5E5E;
+font-style: inherit;">=</span> s.post(</span>
+<span id="cb1-10">    <span class="ss" style="color: #20794D;
 background-color: null;
-font-style: inherit;">=</span> datetime.strptime(data_str, <span class="st" style="color: #20794D;
+font-style: inherit;">f"http://api.olhovivo.sptrans.com.br/v2.1/Login/Autenticar?token=</span><span class="sc" style="color: #5E5E5E;
 background-color: null;
-font-style: inherit;">"%m%Y"</span>)</span>
-<span id="cb1-9">    last_day <span class="op" style="color: #5E5E5E;
+font-style: inherit;">{</span>os<span class="sc" style="color: #5E5E5E;
 background-color: null;
-font-style: inherit;">=</span> calendar.monthrange(first_date.year, first_date.month)[<span class="dv" style="color: #AD0000;
+font-style: inherit;">.</span>getenv(<span class="st" style="color: #20794D;
 background-color: null;
-font-style: inherit;">1</span>]</span>
-<span id="cb1-10">    last_date <span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">=</span> first_date.replace(day<span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">=</span>last_day)</span>
-<span id="cb1-11"></span>
-<span id="cb1-12">    start_api <span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">=</span> first_date.strftime(<span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">"'%m-</span><span class="sc" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">%d</span><span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">-%Y'"</span>)</span>
-<span id="cb1-13">    end_api <span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">=</span> last_date.strftime(<span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">"'%m-</span><span class="sc" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">%d</span><span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">-%Y'"</span>)</span>
-<span id="cb1-14"></span>
-<span id="cb1-15">    url <span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">=</span> <span class="ss" style="color: #20794D;
-background-color: null;
-font-style: inherit;">f"https://olinda.bcb.gov.br/olinda/servico/PTAX/versao/v1/odata/CotacaoDolarPeriodo(dataInicial=</span><span class="sc" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">{</span>start_api<span class="sc" style="color: #5E5E5E;
+font-style: inherit;">'SPTRANS_TOKEN'</span>)<span class="sc" style="color: #5E5E5E;
 background-color: null;
 font-style: inherit;">}</span><span class="ss" style="color: #20794D;
 background-color: null;
-font-style: inherit;">,dataFinalCotacao=</span><span class="sc" style="color: #5E5E5E;
+font-style: inherit;">"</span></span>
+<span id="cb1-11">)</span>
+<span id="cb1-12"></span>
+<span id="cb1-13">pos <span class="op" style="color: #5E5E5E;
 background-color: null;
-font-style: inherit;">{</span>end_api<span class="sc" style="color: #5E5E5E;
+font-style: inherit;">=</span> s.get(</span>
+<span id="cb1-14">    <span class="st" style="color: #20794D;
 background-color: null;
-font-style: inherit;">}</span><span class="ss" style="color: #20794D;
+font-style: inherit;">"http://api.olhovivo.sptrans.com.br/v2.1//Posicao/Linha?codigoLinha=2304"</span></span>
+<span id="cb1-15">)</span>
+<span id="cb1-16">posicao_atual <span class="op" style="color: #5E5E5E;
 background-color: null;
-font-style: inherit;">)?%24format=json"</span></span>
-<span id="cb1-16"></span>
-<span id="cb1-17">    res <span class="op" style="color: #5E5E5E;
+font-style: inherit;">=</span> pos.json()</span>
+<span id="cb1-17">py_bus <span class="op" style="color: #5E5E5E;
 background-color: null;
-font-style: inherit;">=</span> requests.get(url)</span>
-<span id="cb1-18">    dados_json <span class="op" style="color: #5E5E5E;
+font-style: inherit;">=</span> posicao_atual[<span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"vs"</span>][<span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">0</span>][<span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"py"</span>]</span>
+<span id="cb1-18">px_bus <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> posicao_atual[<span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"vs"</span>][<span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">0</span>][<span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"px"</span>]</span>
+<span id="cb1-19"></span>
+<span id="cb1-20">res <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> s.get(</span>
+<span id="cb1-21">    <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"http://api.olhovivo.sptrans.com.br/v2.1/Parada/BuscarParadasPorLinha?codigoLinha=2304"</span></span>
+<span id="cb1-22">)</span>
+<span id="cb1-23">paradas <span class="op" style="color: #5E5E5E;
 background-color: null;
 font-style: inherit;">=</span> res.json()</span>
-<span id="cb1-19"></span>
-<span id="cb1-20">    <span class="cf" style="color: #003B4F;
+<span id="cb1-24"></span>
+<span id="cb1-25">m <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> Map(location<span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span>[py_bus, px_bus], zoom_start<span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span><span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">14</span>)</span>
+<span id="cb1-26"><span class="cf" style="color: #003B4F;
 background-color: null;
 font-weight: bold;
-font-style: inherit;">if</span> <span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">'value'</span> <span class="kw" style="color: #003B4F;
+font-style: inherit;">for</span> i <span class="kw" style="color: #003B4F;
 background-color: null;
 font-weight: bold;
-font-style: inherit;">not</span> <span class="kw" style="color: #003B4F;
+font-style: inherit;">in</span> paradas:</span>
+<span id="cb1-27">    Marker(location<span class="op" style="color: #5E5E5E;
 background-color: null;
-font-weight: bold;
-font-style: inherit;">in</span> dados_json <span class="kw" style="color: #003B4F;
+font-style: inherit;">=</span>[i[<span class="st" style="color: #20794D;
 background-color: null;
-font-weight: bold;
-font-style: inherit;">or</span> <span class="bu" style="color: null;
+font-style: inherit;">"py"</span>], i[<span class="st" style="color: #20794D;
 background-color: null;
-font-style: inherit;">len</span>(dados_json[<span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">'value'</span>]) <span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">==</span> <span class="dv" style="color: #AD0000;
-background-color: null;
-font-style: inherit;">0</span>:</span>
-<span id="cb1-21">        <span class="bu" style="color: null;
-background-color: null;
-font-style: inherit;">print</span>(<span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">"Nenhum dado encontrado."</span>)</span>
-<span id="cb1-22">        <span class="cf" style="color: #003B4F;
-background-color: null;
-font-weight: bold;
-font-style: inherit;">return</span></span>
-<span id="cb1-23"></span>
-<span id="cb1-24">    df <span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">=</span> pd.DataFrame(dados_json[<span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">'value'</span>])</span>
-<span id="cb1-25">    df[<span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">'dataHoraCotacao'</span>] <span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">=</span> pd.to_datetime(df[<span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">'dataHoraCotacao'</span>]).dt.normalize()</span>
-<span id="cb1-26">    df[<span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">'cotacaoVenda'</span>] <span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">=</span> pd.to_numeric(df[<span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">'cotacaoVenda'</span>])</span>
-<span id="cb1-27">    df <span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">=</span> df.set_index(<span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">'dataHoraCotacao'</span>)</span>
-<span id="cb1-28"></span>
-<span id="cb1-29">    idx_completo <span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">=</span> pd.date_range(start<span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">=</span>first_date, end<span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">=</span>last_date)</span>
-<span id="cb1-30">    df_completo <span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">=</span> df.reindex(idx_completo)</span>
-<span id="cb1-31">    df_completo[<span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">'cotacaoVenda'</span>] <span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">=</span> df_completo[<span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">'cotacaoVenda'</span>].ffill()</span>
-<span id="cb1-32"></span>
-<span id="cb1-33">    df_final <span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">=</span> df_completo.reset_index()</span>
-<span id="cb1-34">    df_final.rename(columns<span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">=</span>{<span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">'index'</span>: <span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">'Data'</span>, <span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">'cotacaoVenda'</span>: <span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">'Valor Dólar (R$)'</span>}, inplace<span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">=</span><span class="va" style="color: #111111;
-background-color: null;
-font-style: inherit;">True</span>)</span>
-<span id="cb1-35"></span>
-<span id="cb1-36">    fig <span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">=</span> px.line(</span>
-<span id="cb1-37">        df_final, </span>
-<span id="cb1-38">        x<span class="op" style="color: #5E5E5E;
+font-style: inherit;">"px"</span>]], popup<span class="op" style="color: #5E5E5E;
 background-color: null;
 font-style: inherit;">=</span><span class="st" style="color: #20794D;
 background-color: null;
-font-style: inherit;">'Data'</span>, </span>
-<span id="cb1-39">        y<span class="op" style="color: #5E5E5E;
+font-style: inherit;">"PARADA "</span> <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">+</span> i[<span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"np"</span>]).add_to(m)</span>
+<span id="cb1-28">Marker(location<span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span>[py_bus, px_bus], popup<span class="op" style="color: #5E5E5E;
 background-color: null;
 font-style: inherit;">=</span><span class="st" style="color: #20794D;
 background-color: null;
-font-style: inherit;">'Valor Dólar (R$)'</span>, </span>
-<span id="cb1-40">        title<span class="op" style="color: #5E5E5E;
+font-style: inherit;">"ÔNIBUS"</span>, icon<span class="op" style="color: #5E5E5E;
 background-color: null;
-font-style: inherit;">=</span><span class="ss" style="color: #20794D;
+font-style: inherit;">=</span>Icon(color<span class="op" style="color: #5E5E5E;
 background-color: null;
-font-style: inherit;">f'Cotação do Dólar - Período: </span><span class="sc" style="color: #5E5E5E;
+font-style: inherit;">=</span><span class="st" style="color: #20794D;
 background-color: null;
-font-style: inherit;">{</span>data_str<span class="sc" style="color: #5E5E5E;
+font-style: inherit;">'green'</span>, icon<span class="op" style="color: #5E5E5E;
 background-color: null;
-font-style: inherit;">}</span><span class="ss" style="color: #20794D;
+font-style: inherit;">=</span><span class="st" style="color: #20794D;
 background-color: null;
-font-style: inherit;">'</span>,</span>
-<span id="cb1-41">        markers<span class="op" style="color: #5E5E5E;
+font-style: inherit;">'bus'</span>, prefix<span class="op" style="color: #5E5E5E;
 background-color: null;
-font-style: inherit;">=</span><span class="va" style="color: #111111;
+font-style: inherit;">=</span><span class="st" style="color: #20794D;
 background-color: null;
-font-style: inherit;">True</span></span>
-<span id="cb1-42">    )</span>
-<span id="cb1-43">    </span>
-<span id="cb1-44">    fig.show()</span>
-<span id="cb1-45"></span>
-<span id="cb1-46">gerar_grafico_dolar(<span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">"112024"</span>)</span></code></pre></div></div>
-<div class="cell-output cell-output-display">
-<div>            <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js?config=TeX-AMS-MML_SVG"></script><script type="text/javascript">if (window.MathJax && window.MathJax.Hub && window.MathJax.Hub.Config) {window.MathJax.Hub.Config({SVG: {font: "STIX-Web"}});}</script>                <script type="text/javascript">window.PlotlyConfig = {MathJaxConfig: 'local'};</script>
-        <script charset="utf-8" src="https://cdn.plot.ly/plotly-3.3.0.min.js" integrity="sha256-bO3dS6yCpk9aK4gUpNELtCiDeSYvGYnK7jFI58NQnHI=" crossorigin="anonymous"></script>                <div id="e3d90a06-f03d-43e2-b574-fc2460cac5d7" class="plotly-graph-div" style="height:525px; width:100%;"></div>            <script type="text/javascript">                window.PLOTLYENV=window.PLOTLYENV || {};                                if (document.getElementById("e3d90a06-f03d-43e2-b574-fc2460cac5d7")) {                    Plotly.newPlot(                        "e3d90a06-f03d-43e2-b574-fc2460cac5d7",                        [{"hovertemplate":"Data=%{x}\u003cbr\u003eValor D\u00f3lar (R$)=%{y}\u003cextra\u003e\u003c\u002fextra\u003e","legendgroup":"","line":{"color":"#636efa","dash":"solid"},"marker":{"symbol":"circle"},"mode":"lines+markers","name":"","orientation":"v","showlegend":false,"x":["2024-11-01T00:00:00.000000000","2024-11-02T00:00:00.000000000","2024-11-03T00:00:00.000000000","2024-11-04T00:00:00.000000000","2024-11-05T00:00:00.000000000","2024-11-06T00:00:00.000000000","2024-11-07T00:00:00.000000000","2024-11-08T00:00:00.000000000","2024-11-09T00:00:00.000000000","2024-11-10T00:00:00.000000000","2024-11-11T00:00:00.000000000","2024-11-12T00:00:00.000000000","2024-11-13T00:00:00.000000000","2024-11-14T00:00:00.000000000","2024-11-15T00:00:00.000000000","2024-11-16T00:00:00.000000000","2024-11-17T00:00:00.000000000","2024-11-18T00:00:00.000000000","2024-11-19T00:00:00.000000000","2024-11-20T00:00:00.000000000","2024-11-21T00:00:00.000000000","2024-11-22T00:00:00.000000000","2024-11-23T00:00:00.000000000","2024-11-24T00:00:00.000000000","2024-11-25T00:00:00.000000000","2024-11-26T00:00:00.000000000","2024-11-27T00:00:00.000000000","2024-11-28T00:00:00.000000000","2024-11-29T00:00:00.000000000","2024-11-30T00:00:00.000000000"],"xaxis":"x","y":{"dtype":"f8","bdata":"Qj7o2aw6F0BCPujZrDoXQEI+6NmsOhdA8IXJVMEoF0AzxLEubiMXQFfsL7snDxdASnuDL0ymFkBX7C+7Jw8XQFfsL7snDxdAV+wvuycPF0D+1HjpJjEXQGsr9pfdExdAhJ7Nqs8VF0CBlUOLbCcXQIGVQ4tsJxdAgZVDi2wnF0CBlUOLbCcXQF+YTBWMChdA1CtlGeIYF0DUK2UZ4hgXQE0VjErqRBdA5BQdyeU\u002fF0DkFB3J5T8XQOQUHcnlPxdAbAn5oGczF0AZBFYOLTIXQFR0JJf\u002fUBdAwoanV8ryF0AQWDm0yDYYQBBYObTINhhA"},"yaxis":"y","type":"scatter"}],                        {"template":{"data":{"histogram2dcontour":[{"type":"histogram2dcontour","colorbar":{"outlinewidth":0,"ticks":""},"colorscale":[[0.0,"#0d0887"],[0.1111111111111111,"#46039f"],[0.2222222222222222,"#7201a8"],[0.3333333333333333,"#9c179e"],[0.4444444444444444,"#bd3786"],[0.5555555555555556,"#d8576b"],[0.6666666666666666,"#ed7953"],[0.7777777777777778,"#fb9f3a"],[0.8888888888888888,"#fdca26"],[1.0,"#f0f921"]]}],"choropleth":[{"type":"choropleth","colorbar":{"outlinewidth":0,"ticks":""}}],"histogram2d":[{"type":"histogram2d","colorbar":{"outlinewidth":0,"ticks":""},"colorscale":[[0.0,"#0d0887"],[0.1111111111111111,"#46039f"],[0.2222222222222222,"#7201a8"],[0.3333333333333333,"#9c179e"],[0.4444444444444444,"#bd3786"],[0.5555555555555556,"#d8576b"],[0.6666666666666666,"#ed7953"],[0.7777777777777778,"#fb9f3a"],[0.8888888888888888,"#fdca26"],[1.0,"#f0f921"]]}],"heatmap":[{"type":"heatmap","colorbar":{"outlinewidth":0,"ticks":""},"colorscale":[[0.0,"#0d0887"],[0.1111111111111111,"#46039f"],[0.2222222222222222,"#7201a8"],[0.3333333333333333,"#9c179e"],[0.4444444444444444,"#bd3786"],[0.5555555555555556,"#d8576b"],[0.6666666666666666,"#ed7953"],[0.7777777777777778,"#fb9f3a"],[0.8888888888888888,"#fdca26"],[1.0,"#f0f921"]]}],"contourcarpet":[{"type":"contourcarpet","colorbar":{"outlinewidth":0,"ticks":""}}],"contour":[{"type":"contour","colorbar":{"outlinewidth":0,"ticks":""},"colorscale":[[0.0,"#0d0887"],[0.1111111111111111,"#46039f"],[0.2222222222222222,"#7201a8"],[0.3333333333333333,"#9c179e"],[0.4444444444444444,"#bd3786"],[0.5555555555555556,"#d8576b"],[0.6666666666666666,"#ed7953"],[0.7777777777777778,"#fb9f3a"],[0.8888888888888888,"#fdca26"],[1.0,"#f0f921"]]}],"surface":[{"type":"surface","colorbar":{"outlinewidth":0,"ticks":""},"colorscale":[[0.0,"#0d0887"],[0.1111111111111111,"#46039f"],[0.2222222222222222,"#7201a8"],[0.3333333333333333,"#9c179e"],[0.4444444444444444,"#bd3786"],[0.5555555555555556,"#d8576b"],[0.6666666666666666,"#ed7953"],[0.7777777777777778,"#fb9f3a"],[0.8888888888888888,"#fdca26"],[1.0,"#f0f921"]]}],"mesh3d":[{"type":"mesh3d","colorbar":{"outlinewidth":0,"ticks":""}}],"scatter":[{"fillpattern":{"fillmode":"overlay","size":10,"solidity":0.2},"type":"scatter"}],"parcoords":[{"type":"parcoords","line":{"colorbar":{"outlinewidth":0,"ticks":""}}}],"scatterpolargl":[{"type":"scatterpolargl","marker":{"colorbar":{"outlinewidth":0,"ticks":""}}}],"bar":[{"error_x":{"color":"#2a3f5f"},"error_y":{"color":"#2a3f5f"},"marker":{"line":{"color":"#E5ECF6","width":0.5},"pattern":{"fillmode":"overlay","size":10,"solidity":0.2}},"type":"bar"}],"scattergeo":[{"type":"scattergeo","marker":{"colorbar":{"outlinewidth":0,"ticks":""}}}],"scatterpolar":[{"type":"scatterpolar","marker":{"colorbar":{"outlinewidth":0,"ticks":""}}}],"histogram":[{"marker":{"pattern":{"fillmode":"overlay","size":10,"solidity":0.2}},"type":"histogram"}],"scattergl":[{"type":"scattergl","marker":{"colorbar":{"outlinewidth":0,"ticks":""}}}],"scatter3d":[{"type":"scatter3d","line":{"colorbar":{"outlinewidth":0,"ticks":""}},"marker":{"colorbar":{"outlinewidth":0,"ticks":""}}}],"scattermap":[{"type":"scattermap","marker":{"colorbar":{"outlinewidth":0,"ticks":""}}}],"scattermapbox":[{"type":"scattermapbox","marker":{"colorbar":{"outlinewidth":0,"ticks":""}}}],"scatterternary":[{"type":"scatterternary","marker":{"colorbar":{"outlinewidth":0,"ticks":""}}}],"scattercarpet":[{"type":"scattercarpet","marker":{"colorbar":{"outlinewidth":0,"ticks":""}}}],"carpet":[{"aaxis":{"endlinecolor":"#2a3f5f","gridcolor":"white","linecolor":"white","minorgridcolor":"white","startlinecolor":"#2a3f5f"},"baxis":{"endlinecolor":"#2a3f5f","gridcolor":"white","linecolor":"white","minorgridcolor":"white","startlinecolor":"#2a3f5f"},"type":"carpet"}],"table":[{"cells":{"fill":{"color":"#EBF0F8"},"line":{"color":"white"}},"header":{"fill":{"color":"#C8D4E3"},"line":{"color":"white"}},"type":"table"}],"barpolar":[{"marker":{"line":{"color":"#E5ECF6","width":0.5},"pattern":{"fillmode":"overlay","size":10,"solidity":0.2}},"type":"barpolar"}],"pie":[{"automargin":true,"type":"pie"}]},"layout":{"autotypenumbers":"strict","colorway":["#636efa","#EF553B","#00cc96","#ab63fa","#FFA15A","#19d3f3","#FF6692","#B6E880","#FF97FF","#FECB52"],"font":{"color":"#2a3f5f"},"hovermode":"closest","hoverlabel":{"align":"left"},"paper_bgcolor":"white","plot_bgcolor":"#E5ECF6","polar":{"bgcolor":"#E5ECF6","angularaxis":{"gridcolor":"white","linecolor":"white","ticks":""},"radialaxis":{"gridcolor":"white","linecolor":"white","ticks":""}},"ternary":{"bgcolor":"#E5ECF6","aaxis":{"gridcolor":"white","linecolor":"white","ticks":""},"baxis":{"gridcolor":"white","linecolor":"white","ticks":""},"caxis":{"gridcolor":"white","linecolor":"white","ticks":""}},"coloraxis":{"colorbar":{"outlinewidth":0,"ticks":""}},"colorscale":{"sequential":[[0.0,"#0d0887"],[0.1111111111111111,"#46039f"],[0.2222222222222222,"#7201a8"],[0.3333333333333333,"#9c179e"],[0.4444444444444444,"#bd3786"],[0.5555555555555556,"#d8576b"],[0.6666666666666666,"#ed7953"],[0.7777777777777778,"#fb9f3a"],[0.8888888888888888,"#fdca26"],[1.0,"#f0f921"]],"sequentialminus":[[0.0,"#0d0887"],[0.1111111111111111,"#46039f"],[0.2222222222222222,"#7201a8"],[0.3333333333333333,"#9c179e"],[0.4444444444444444,"#bd3786"],[0.5555555555555556,"#d8576b"],[0.6666666666666666,"#ed7953"],[0.7777777777777778,"#fb9f3a"],[0.8888888888888888,"#fdca26"],[1.0,"#f0f921"]],"diverging":[[0,"#8e0152"],[0.1,"#c51b7d"],[0.2,"#de77ae"],[0.3,"#f1b6da"],[0.4,"#fde0ef"],[0.5,"#f7f7f7"],[0.6,"#e6f5d0"],[0.7,"#b8e186"],[0.8,"#7fbc41"],[0.9,"#4d9221"],[1,"#276419"]]},"xaxis":{"gridcolor":"white","linecolor":"white","ticks":"","title":{"standoff":15},"zerolinecolor":"white","automargin":true,"zerolinewidth":2},"yaxis":{"gridcolor":"white","linecolor":"white","ticks":"","title":{"standoff":15},"zerolinecolor":"white","automargin":true,"zerolinewidth":2},"scene":{"xaxis":{"backgroundcolor":"#E5ECF6","gridcolor":"white","linecolor":"white","showbackground":true,"ticks":"","zerolinecolor":"white","gridwidth":2},"yaxis":{"backgroundcolor":"#E5ECF6","gridcolor":"white","linecolor":"white","showbackground":true,"ticks":"","zerolinecolor":"white","gridwidth":2},"zaxis":{"backgroundcolor":"#E5ECF6","gridcolor":"white","linecolor":"white","showbackground":true,"ticks":"","zerolinecolor":"white","gridwidth":2}},"shapedefaults":{"line":{"color":"#2a3f5f"}},"annotationdefaults":{"arrowcolor":"#2a3f5f","arrowhead":0,"arrowwidth":1},"geo":{"bgcolor":"white","landcolor":"#E5ECF6","subunitcolor":"white","showland":true,"showlakes":true,"lakecolor":"white"},"title":{"x":0.05},"mapbox":{"style":"light"},"margin":{"b":0,"l":0,"r":0,"t":30}}},"xaxis":{"anchor":"y","domain":[0.0,1.0],"title":{"text":"Data"}},"yaxis":{"anchor":"x","domain":[0.0,1.0],"title":{"text":"Valor D\u00f3lar (R$)"}},"legend":{"tracegroupgap":0},"title":{"text":"Cota\u00e7\u00e3o do D\u00f3lar - Per\u00edodo: 112024"}},                        {"responsive": true}                    ).then(function(){
-                            
-var gd = document.getElementById('e3d90a06-f03d-43e2-b574-fc2460cac5d7');
-var x = new MutationObserver(function (mutations, observer) {{
-        var display = window.getComputedStyle(gd).display;
-        if (!display || display === 'none') {{
-            console.log([gd, 'removed!']);
-            Plotly.purge(gd);
-            observer.disconnect();
-        }}
-}});
+font-style: inherit;">'fa'</span>)).add_to(m)</span>
+<span id="cb1-29"></span>
+<span id="cb1-30">m</span></code></pre></div></div>
+<div class="cell-output cell-output-display" data-execution_count="1">
+<div style="width:100%;"><div style="position:relative;width:100%;height:0;padding-bottom:60%;"><span style="color:#565656">Make this Notebook Trusted to load map: File -&gt; Trust Notebook</span><iframe srcdoc="<!DOCTYPE html>
+<html>
+<head>
+    
+    <meta http-equiv=&quot;content-type&quot; content=&quot;text/html; charset=UTF-8&quot; />
+    <script src=&quot;https://cdn.jsdelivr.net/npm/leaflet@1.9.3/dist/leaflet.js&quot;></script>
+    <script src=&quot;https://code.jquery.com/jquery-3.7.1.min.js&quot;></script>
+    <script src=&quot;https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/js/bootstrap.bundle.min.js&quot;></script>
+    <script src=&quot;https://cdnjs.cloudflare.com/ajax/libs/Leaflet.awesome-markers/2.0.2/leaflet.awesome-markers.js&quot;></script>
+    <link rel=&quot;stylesheet&quot; href=&quot;https://cdn.jsdelivr.net/npm/leaflet@1.9.3/dist/leaflet.css&quot;/>
+    <link rel=&quot;stylesheet&quot; href=&quot;https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/css/bootstrap.min.css&quot;/>
+    <link rel=&quot;stylesheet&quot; href=&quot;https://netdna.bootstrapcdn.com/bootstrap/3.0.0/css/bootstrap-glyphicons.css&quot;/>
+    <link rel=&quot;stylesheet&quot; href=&quot;https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.2.0/css/all.min.css&quot;/>
+    <link rel=&quot;stylesheet&quot; href=&quot;https://cdnjs.cloudflare.com/ajax/libs/Leaflet.awesome-markers/2.0.2/leaflet.awesome-markers.css&quot;/>
+    <link rel=&quot;stylesheet&quot; href=&quot;https://cdn.jsdelivr.net/gh/python-visualization/folium/folium/templates/leaflet.awesome.rotate.min.css&quot;/>
+    
+            <meta name=&quot;viewport&quot; content=&quot;width=device-width,
+                initial-scale=1.0, maximum-scale=1.0, user-scalable=no&quot; />
+            <style>
+                #map_facd0217358ce6e7035bbfa11ac62fa7 {
+                    position: relative;
+                    width: 100.0%;
+                    height: 100.0%;
+                    left: 0.0%;
+                    top: 0.0%;
+                }
+                .leaflet-container { font-size: 1rem; }
+            </style>
 
-// Listen for the removal of the full notebook cells
-var notebookContainer = gd.closest('#notebook-container');
-if (notebookContainer) {{
-    x.observe(notebookContainer, {childList: true});
-}}
+            <style>html, body {
+                width: 100%;
+                height: 100%;
+                margin: 0;
+                padding: 0;
+            }
+            </style>
 
-// Listen for the clearing of the current output cell
-var outputEl = gd.closest('.output');
-if (outputEl) {{
-    x.observe(outputEl, {childList: true});
-}}
+            <style>#map {
+                position:absolute;
+                top:0;
+                bottom:0;
+                right:0;
+                left:0;
+                }
+            </style>
 
-                        })                };            </script>        </div>
+            <script>
+                L_NO_TOUCH = false;
+                L_DISABLE_3D = false;
+            </script>
+
+        
+</head>
+<body>
+    
+    
+            <div class=&quot;folium-map&quot; id=&quot;map_facd0217358ce6e7035bbfa11ac62fa7&quot; ></div>
+        
+</body>
+<script>
+    
+    
+            var map_facd0217358ce6e7035bbfa11ac62fa7 = L.map(
+                &quot;map_facd0217358ce6e7035bbfa11ac62fa7&quot;,
+                {
+                    center: [-23.48940525, -46.69845125],
+                    crs: L.CRS.EPSG3857,
+                    ...{
+  &quot;zoom&quot;: 14,
+  &quot;zoomControl&quot;: true,
+  &quot;preferCanvas&quot;: false,
+}
+
+                }
+            );
+
+            
+
+        
+    
+            var tile_layer_51765fbcde17d272ae3533e112d2c54c = L.tileLayer(
+                &quot;https://tile.openstreetmap.org/{z}/{x}/{y}.png&quot;,
+                {
+  &quot;minZoom&quot;: 0,
+  &quot;maxZoom&quot;: 19,
+  &quot;maxNativeZoom&quot;: 19,
+  &quot;noWrap&quot;: false,
+  &quot;attribution&quot;: &quot;\u0026copy; \u003ca href=\&quot;https://www.openstreetmap.org/copyright\&quot;\u003eOpenStreetMap\u003c/a\u003e contributors&quot;,
+  &quot;subdomains&quot;: &quot;abc&quot;,
+  &quot;detectRetina&quot;: false,
+  &quot;tms&quot;: false,
+  &quot;opacity&quot;: 1,
+}
+
+            );
+        
+    
+            tile_layer_51765fbcde17d272ae3533e112d2c54c.addTo(map_facd0217358ce6e7035bbfa11ac62fa7);
+        
+    
+            var marker_af50aea7f8538e9a9d06ceaaa6f127e2 = L.marker(
+                [-23.525799, -46.679251],
+                {
+}
+            ).addTo(map_facd0217358ce6e7035bbfa11ac62fa7);
+        
+    
+        var popup_cb4458aaee1d3f518d5e6d5baa7e93cd = L.popup({
+  &quot;maxWidth&quot;: &quot;100%&quot;,
+});
+
+        
+            
+                var html_3ded32cc612ac71a104e8090eb8366f1 = $(`<div id=&quot;html_3ded32cc612ac71a104e8090eb8366f1&quot; style=&quot;width: 100.0%; height: 100.0%;&quot;>PARADA PARADA PALMEIRAS B/C</div>`)[0];
+                popup_cb4458aaee1d3f518d5e6d5baa7e93cd.setContent(html_3ded32cc612ac71a104e8090eb8366f1);
+            
+        
+
+        marker_af50aea7f8538e9a9d06ceaaa6f127e2.bindPopup(popup_cb4458aaee1d3f518d5e6d5baa7e93cd)
+        ;
+
+        
+    
+    
+            var marker_287f89e2b268c5b0dcd8ee22bb314121 = L.marker(
+                [-23.511052, -46.705493],
+                {
+}
+            ).addTo(map_facd0217358ce6e7035bbfa11ac62fa7);
+        
+    
+        var popup_69b2326c9081311b95b76742fbd6d526 = L.popup({
+  &quot;maxWidth&quot;: &quot;100%&quot;,
+});
+
+        
+            
+                var html_4557d32abe542f12598cbb10c9218aa9 = $(`<div id=&quot;html_4557d32abe542f12598cbb10c9218aa9&quot; style=&quot;width: 100.0%; height: 100.0%;&quot;>PARADA MARGINAL B/C</div>`)[0];
+                popup_69b2326c9081311b95b76742fbd6d526.setContent(html_4557d32abe542f12598cbb10c9218aa9);
+            
+        
+
+        marker_287f89e2b268c5b0dcd8ee22bb314121.bindPopup(popup_69b2326c9081311b95b76742fbd6d526)
+        ;
+
+        
+    
+    
+            var marker_18f24f83b20f4b17ffc66f1733b0df02 = L.marker(
+                [-23.514036, -46.702259],
+                {
+}
+            ).addTo(map_facd0217358ce6e7035bbfa11ac62fa7);
+        
+    
+        var popup_0a3255f1272530c24481195a73626210 = L.popup({
+  &quot;maxWidth&quot;: &quot;100%&quot;,
+});
+
+        
+            
+                var html_bf91e15e65e5ae57f683f413bb53723c = $(`<div id=&quot;html_bf91e15e65e5ae57f683f413bb53723c&quot; style=&quot;width: 100.0%; height: 100.0%;&quot;>PARADA JOSE MARIA B/C</div>`)[0];
+                popup_0a3255f1272530c24481195a73626210.setContent(html_bf91e15e65e5ae57f683f413bb53723c);
+            
+        
+
+        marker_18f24f83b20f4b17ffc66f1733b0df02.bindPopup(popup_0a3255f1272530c24481195a73626210)
+        ;
+
+        
+    
+    
+            var marker_44111a677d7f34c570485942593d7336 = L.marker(
+                [-23.516592, -46.698575],
+                {
+}
+            ).addTo(map_facd0217358ce6e7035bbfa11ac62fa7);
+        
+    
+        var popup_8dd4837fdaea0b6cd25a8f9b5ceed8c6 = L.popup({
+  &quot;maxWidth&quot;: &quot;100%&quot;,
+});
+
+        
+            
+                var html_8a3397d36d638c0c49bd0c74d5932d6d = $(`<div id=&quot;html_8a3397d36d638c0c49bd0c74d5932d6d&quot; style=&quot;width: 100.0%; height: 100.0%;&quot;>PARADA ZANELLA B/C</div>`)[0];
+                popup_8dd4837fdaea0b6cd25a8f9b5ceed8c6.setContent(html_8a3397d36d638c0c49bd0c74d5932d6d);
+            
+        
+
+        marker_44111a677d7f34c570485942593d7336.bindPopup(popup_8dd4837fdaea0b6cd25a8f9b5ceed8c6)
+        ;
+
+        
+    
+    
+            var marker_70813385710017cdb1c04257d7436701 = L.marker(
+                [-23.52494, -46.698995],
+                {
+}
+            ).addTo(map_facd0217358ce6e7035bbfa11ac62fa7);
+        
+    
+        var popup_61ddf4a3beacd83b191bf2e2920a5864 = L.popup({
+  &quot;maxWidth&quot;: &quot;100%&quot;,
+});
+
+        
+            
+                var html_d43195c00280768c9f3a963512560e45 = $(`<div id=&quot;html_d43195c00280768c9f3a963512560e45&quot; style=&quot;width: 100.0%; height: 100.0%;&quot;>PARADA SCIPIAO B/C</div>`)[0];
+                popup_61ddf4a3beacd83b191bf2e2920a5864.setContent(html_d43195c00280768c9f3a963512560e45);
+            
+        
+
+        marker_70813385710017cdb1c04257d7436701.bindPopup(popup_61ddf4a3beacd83b191bf2e2920a5864)
+        ;
+
+        
+    
+    
+            var marker_b745a39fe89fc27ea2fc5127911fbbc6 = L.marker(
+                [-23.524994, -46.695297],
+                {
+}
+            ).addTo(map_facd0217358ce6e7035bbfa11ac62fa7);
+        
+    
+        var popup_2be6a4bacb8421e62eacdd391893de55 = L.popup({
+  &quot;maxWidth&quot;: &quot;100%&quot;,
+});
+
+        
+            
+                var html_1e57e9b367b846ad58758972ffa5d851 = $(`<div id=&quot;html_1e57e9b367b846ad58758972ffa5d851&quot; style=&quot;width: 100.0%; height: 100.0%;&quot;>PARADA VESPASIANO B/C</div>`)[0];
+                popup_2be6a4bacb8421e62eacdd391893de55.setContent(html_1e57e9b367b846ad58758972ffa5d851);
+            
+        
+
+        marker_b745a39fe89fc27ea2fc5127911fbbc6.bindPopup(popup_2be6a4bacb8421e62eacdd391893de55)
+        ;
+
+        
+    
+    
+            var marker_bd771701f3893c7af00f1d0e131020e0 = L.marker(
+                [-23.525029, -46.690074],
+                {
+}
+            ).addTo(map_facd0217358ce6e7035bbfa11ac62fa7);
+        
+    
+        var popup_f4d392af30c34f81985d8b464a01d34a = L.popup({
+  &quot;maxWidth&quot;: &quot;100%&quot;,
+});
+
+        
+            
+                var html_e79f2a3ccb4cb4a5bf48ae9fc97866dc = $(`<div id=&quot;html_e79f2a3ccb4cb4a5bf48ae9fc97866dc&quot; style=&quot;width: 100.0%; height: 100.0%;&quot;>PARADA CORNELIA</div>`)[0];
+                popup_f4d392af30c34f81985d8b464a01d34a.setContent(html_e79f2a3ccb4cb4a5bf48ae9fc97866dc);
+            
+        
+
+        marker_bd771701f3893c7af00f1d0e131020e0.bindPopup(popup_f4d392af30c34f81985d8b464a01d34a)
+        ;
+
+        
+    
+    
+            var marker_674b0348c7f06ba240d0eeb36740a251 = L.marker(
+                [-23.52517, -46.683408],
+                {
+}
+            ).addTo(map_facd0217358ce6e7035bbfa11ac62fa7);
+        
+    
+        var popup_6005837b2033b20f870b6bfa40294d7f = L.popup({
+  &quot;maxWidth&quot;: &quot;100%&quot;,
+});
+
+        
+            
+                var html_03f08e8f644e8cf7b4ee78ba6ff33af0 = $(`<div id=&quot;html_03f08e8f644e8cf7b4ee78ba6ff33af0&quot; style=&quot;width: 100.0%; height: 100.0%;&quot;>PARADA SESC POMPEIA B/C</div>`)[0];
+                popup_6005837b2033b20f870b6bfa40294d7f.setContent(html_03f08e8f644e8cf7b4ee78ba6ff33af0);
+            
+        
+
+        marker_674b0348c7f06ba240d0eeb36740a251.bindPopup(popup_6005837b2033b20f870b6bfa40294d7f)
+        ;
+
+        
+    
+    
+            var marker_1d16765283958c28165d5072aef3dcb8 = L.marker(
+                [-23.500896, -46.706633],
+                {
+}
+            ).addTo(map_facd0217358ce6e7035bbfa11ac62fa7);
+        
+    
+        var popup_715ee6f2e66690ab9831aa0b7accc7e0 = L.popup({
+  &quot;maxWidth&quot;: &quot;100%&quot;,
+});
+
+        
+            
+                var html_6bbbef3c01ac8ceb240c04580ae352e2 = $(`<div id=&quot;html_6bbbef3c01ac8ceb240c04580ae352e2&quot; style=&quot;width: 100.0%; height: 100.0%;&quot;>PARADA PAULA FERREIRA B/C</div>`)[0];
+                popup_715ee6f2e66690ab9831aa0b7accc7e0.setContent(html_6bbbef3c01ac8ceb240c04580ae352e2);
+            
+        
+
+        marker_1d16765283958c28165d5072aef3dcb8.bindPopup(popup_715ee6f2e66690ab9831aa0b7accc7e0)
+        ;
+
+        
+    
+    
+            var marker_4c3235aa6ecad011467dfcd3512f32d3 = L.marker(
+                [-23.50616, -46.706061],
+                {
+}
+            ).addTo(map_facd0217358ce6e7035bbfa11ac62fa7);
+        
+    
+        var popup_5ef78443b789426e2ad30cb6b549fe19 = L.popup({
+  &quot;maxWidth&quot;: &quot;100%&quot;,
+});
+
+        
+            
+                var html_bf4aade4320a49a44516ecd25c14a741 = $(`<div id=&quot;html_bf4aade4320a49a44516ecd25c14a741&quot; style=&quot;width: 100.0%; height: 100.0%;&quot;>PARADA PIQUERI B/C</div>`)[0];
+                popup_5ef78443b789426e2ad30cb6b549fe19.setContent(html_bf4aade4320a49a44516ecd25c14a741);
+            
+        
+
+        marker_4c3235aa6ecad011467dfcd3512f32d3.bindPopup(popup_5ef78443b789426e2ad30cb6b549fe19)
+        ;
+
+        
+    
+    
+            var marker_53d11bb90c844f800e572ffed8156f44 = L.marker(
+                [-23.48940525, -46.69845125],
+                {
+}
+            ).addTo(map_facd0217358ce6e7035bbfa11ac62fa7);
+        
+    
+            var icon_bdc172fed1a1d2ea14164eb5e6929c00 = L.AwesomeMarkers.icon(
+                {
+  &quot;markerColor&quot;: &quot;green&quot;,
+  &quot;iconColor&quot;: &quot;white&quot;,
+  &quot;icon&quot;: &quot;bus&quot;,
+  &quot;prefix&quot;: &quot;fa&quot;,
+  &quot;extraClasses&quot;: &quot;fa-rotate-0&quot;,
+}
+            );
+        
+    
+        var popup_661027ca55dec55470e67749c0bf3f15 = L.popup({
+  &quot;maxWidth&quot;: &quot;100%&quot;,
+});
+
+        
+            
+                var html_b316b705eeac25b94fc53cc92b8749c8 = $(`<div id=&quot;html_b316b705eeac25b94fc53cc92b8749c8&quot; style=&quot;width: 100.0%; height: 100.0%;&quot;>ÔNIBUS</div>`)[0];
+                popup_661027ca55dec55470e67749c0bf3f15.setContent(html_b316b705eeac25b94fc53cc92b8749c8);
+            
+        
+
+        marker_53d11bb90c844f800e572ffed8156f44.bindPopup(popup_661027ca55dec55470e67749c0bf3f15)
+        ;
+
+        
+    
+    
+                marker_53d11bb90c844f800e572ffed8156f44.setIcon(icon_bdc172fed1a1d2ea14164eb5e6929c00);
+            
+</script>
+</html>" style="position:absolute;width:100%;height:100%;left:0;top:0;border:none !important;" allowfullscreen="" webkitallowfullscreen="" mozallowfullscreen=""></iframe></div></div>
 </div>
 </div>
 
