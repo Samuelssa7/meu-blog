@@ -1,0 +1,12 @@
+{
+  "hash": "a32ee976d8ac477acb1da80a05ed752b",
+  "result": {
+    "engine": "jupyter",
+    "markdown": "---\ntitle: \"Regressão Linear\"\nauthor: \"Samuel Andrey\"\ndate: \"2025-11-16\"\ncategories: [news]\nimage: image.jpg\n---\n\nThis is the first post in a Quarto blog. Welcome!\n\n```\n{python}\n\nimport numpy as np\nimport pandas as pd\nfrom plotnine import ggplot, aes, geom_point, geom_abline, ggsave\n\nvalores_x = np.loadtxt('X.txt')\nvalores_y = np.loadtxt('y.txt')\n\nX_b = np.c_[np.ones((len(valores_x), 1)), valores_x]\ntheta_best = np.linalg.inv(X_b.T.dot(X_b)).dot(X_b.T).dot(valores_y)\n\na = theta_best[0]\nb = theta_best[1]\n\ndf = {\"x\": valores_x, \"y\": valores_y}\n\nplot = (\n  ggplot(pd.DataFrame(df), aes(\"x\", \"y\"))\n  + geom_point()\n  + geom_abline(intercept=a, slope=b, color=\"red\")\n)\n\nplot.save(\"grafico.png\")\nprint(grafico.png)\n\n```\n\n",
+    "supporting": [
+      "index_files"
+    ],
+    "filters": [],
+    "includes": {}
+  }
+}

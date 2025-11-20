@@ -1,8 +1,8 @@
 ---
 title: "Monitoramento da Frota de Ônibus"
-autor: "Samuel"
+autor: "Samuel Andrey"
 date: "2025-11-19"
-categories: [news, code, analysis]
+categories: [maps, code, transport]
 image: "image_bus.jpg"
 ---
 

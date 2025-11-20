@@ -4,7 +4,7 @@
     "href": "index.html",
     "title": "codes",
     "section": "",
-    "text": "Monitoramento da Frota de Ônibus\n\n\n\nnews\n\ncode\n\nanalysis\n\n\n\n\n\n\n\n\n\nNov 19, 2025\n\n\n\n\n\n\n\n\n\n\n\n\nCotação do Dólar\n\n\n\nnews\n\ncode\n\nanalysis\n\n\n\n\n\n\n\n\n\nNov 19, 2025\n\n\n\n\n\n\n\n\n\n\n\n\nRegressão Linear\n\n\n\nnews\n\n\n\n\n\n\n\n\n\nNov 16, 2025\n\n\nSamuel Andrey\n\n\n\n\n\nNo matching items"
+    "text": "Monitoramento da Frota de Ônibus\n\n\n\nmaps\n\ncode\n\ntransport\n\n\n\n\n\n\n\n\n\nNov 19, 2025\n\n\n\n\n\n\n\n\n\n\n\n\nCotação do Dólar\n\n\n\nnews\n\ncode\n\nanalysis\n\ndollar\n\n\n\n\n\n\n\n\n\nNov 19, 2025\n\n\n\n\n\n\n\n\n\n\n\n\nRegressão Linear\n\n\n\nnews\n\n\n\n\n\n\n\n\n\nNov 16, 2025\n\n\nSamuel Andrey\n\n\n\n\n\nNo matching items"
   },
   {
     "objectID": "posts/post-with-code/index.html",
@@ -32,7 +32,7 @@
     "href": "posts/regressao-linear/index.html",
     "title": "Regressão Linear",
     "section": "",
-    "text": "This is the first post in a Quarto blog. Welcome!\n\nSince this post doesn’t specify an explicit image, the first image in the post will be used in the listing page of posts."
+    "text": "This is the first post in a Quarto blog. Welcome!\n{python}\n\nimport numpy as np\nimport pandas as pd\nfrom plotnine import ggplot, aes, geom_point, geom_abline, ggsave\n\nvalores_x = np.loadtxt('X.txt')\nvalores_y = np.loadtxt('y.txt')\n\nX_b = np.c_[np.ones((len(valores_x), 1)), valores_x]\ntheta_best = np.linalg.inv(X_b.T.dot(X_b)).dot(X_b.T).dot(valores_y)\n\na = theta_best[0]\nb = theta_best[1]\n\ndf = {\"x\": valores_x, \"y\": valores_y}\n\nplot = (\n  ggplot(pd.DataFrame(df), aes(\"x\", \"y\"))\n  + geom_point()\n  + geom_abline(intercept=a, slope=b, color=\"red\")\n)\n\nplot.save(\"grafico.png\")\nprint(grafico.png)"
   },
   {
     "objectID": "posts/cotacao-do-dolar/index.html",

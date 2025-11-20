@@ -545,9 +545,9 @@ font-style: inherit;">'fa'</span>)).add_to(m)</span>
 
 
  ]]></description>
-  <category>news</category>
+  <category>maps</category>
   <category>code</category>
-  <category>analysis</category>
+  <category>transport</category>
   <guid>https://your-website-url.example.com/posts/monitoramento-da-frota-de-onibus/</guid>
   <pubDate>Wed, 19 Nov 2025 00:00:00 GMT</pubDate>
   <media:content url="https://your-website-url.example.com/posts/monitoramento-da-frota-de-onibus/image_bus.jpg" medium="image" type="image/jpeg"/>
@@ -818,6 +818,7 @@ if (outputEl) {{
   <category>news</category>
   <category>code</category>
   <category>analysis</category>
+  <category>dollar</category>
   <guid>https://your-website-url.example.com/posts/cotacao-do-dolar/</guid>
   <pubDate>Wed, 19 Nov 2025 00:00:00 GMT</pubDate>
   <media:content url="https://your-website-url.example.com/posts/cotacao-do-dolar/image_dolar.jpg" medium="image" type="image/jpeg"/>
@@ -834,8 +835,32 @@ if (outputEl) {{
 
 
 <p>This is the first post in a Quarto blog. Welcome!</p>
-<p><img src="https://your-website-url.example.com/posts/regressao-linear/thumbnail.jpg" class="img-fluid"></p>
-<p>Since this post doesn’t specify an explicit <code>image</code>, the first image in the post will be used in the listing page of posts.</p>
+<pre><code>{python}
+
+import numpy as np
+import pandas as pd
+from plotnine import ggplot, aes, geom_point, geom_abline, ggsave
+
+valores_x = np.loadtxt('X.txt')
+valores_y = np.loadtxt('y.txt')
+
+X_b = np.c_[np.ones((len(valores_x), 1)), valores_x]
+theta_best = np.linalg.inv(X_b.T.dot(X_b)).dot(X_b.T).dot(valores_y)
+
+a = theta_best[0]
+b = theta_best[1]
+
+df = {"x": valores_x, "y": valores_y}
+
+plot = (
+  ggplot(pd.DataFrame(df), aes("x", "y"))
+  + geom_point()
+  + geom_abline(intercept=a, slope=b, color="red")
+)
+
+plot.save("grafico.png")
+print(grafico.png)
+</code></pre>
 
 
 
@@ -843,6 +868,7 @@ if (outputEl) {{
   <category>news</category>
   <guid>https://your-website-url.example.com/posts/regressao-linear/</guid>
   <pubDate>Sun, 16 Nov 2025 00:00:00 GMT</pubDate>
+  <media:content url="https://your-website-url.example.com/posts/regressao-linear/image.jpg" medium="image" type="image/jpeg"/>
 </item>
 </channel>
 </rss>

@@ -2,7 +2,7 @@
 title: "Cotação do Dólar"
 autor: "Samuel Andrey"
 date: "2025-11-19"
-categories: [news, code, analysis]
+categories: [news, code, analysis, dollar]
 image: "image_dolar.jpg"
 ---
 
