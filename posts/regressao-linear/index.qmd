@@ -1,16 +1,66 @@
 ---
-title: "Regressão Linear"
+title: "Regressão Linear: Relação entre Salário e Estudo"
 author: "Samuel Andrey"
-date: "2025-11-16"
-categories: [news]
-image: image.jpg
+date: "2025-11-21"
+categories: [python, data-science, statistics, plotnine, numpy]
+image: "image.jpg"
 ---
 
-Regressão Linear em código!
+Veja um gáfico linear analisando anos de estudo e faixa salarial. 📈
 
+---
+
+### 1. Carregamento das Bibliotecas e Dados
+
+Nesta etapa, importamos as bibliotecas necessárias para manipulação de arrays (`numpy`), dados (`pandas`) e gráficos (`plotnine`). Também carregamos os dados de entrada (`X.txt`) e saída (`y.txt`).
+
+```{python}
+import numpy as np
+import pandas as pd
+from plotnine import ggplot, aes, geom_point, geom_abline, ggsave
+
+valores_x = np.loadtxt('X.txt')
+valores_y = np.loadtxt('y.txt')
 ```
-{python}
 
+---
+
+### 2. Cálculo dos Coeficientes
+Aqui preparamos a matriz adicionando uma coluna de "1s" (`para o intercepto`) e aplicamos a fórmula da Equação Normal para encontrar os melhores valores para theta. Ao final, separamos o intercepto (`a`) e a inclinação (`b`).
+
+```{python}
+X_b = np.c_[np.ones((len(valores_x), 1)), valores_x]
+theta_best = np.linalg.inv(X_b.T.dot(X_b)).dot(X_b.T).dot(valores_y)
+
+a = theta_best[0]
+b = theta_best[1]
+```
+
+---
+
+### 3. Geração e Salvamento do Gráfico
+Com os coeficientes calculados, criamos o gráfico contendo os pontos originais e a reta de regressão (`em vermelho`). O comando final salva o resultado como uma imagem.
+
+```{python}
+#| warning: false
+df = {"x": valores_x, "y": valores_y}
+
+plot = (
+  ggplot(pd.DataFrame(df), aes("x", "y"))
+  + geom_point()
+  + geom_abline(intercept=a, slope=b, color="red")
+)
+
+plot.save("grafico.png")
+```
+
+---
+
+### Código Completo e Resultado
+Abaixo, o código completo para execução e a imagem gerada:
+
+```{python}
+#| warning: false
 import numpy as np
 import pandas as pd
 from plotnine import ggplot, aes, geom_point, geom_abline, ggsave
@@ -33,6 +83,6 @@ plot = (
 )
 
 plot.save("grafico.png")
-print(grafico.png)
-
 ```
+
+![Gráfico de Regressão Linear](grafico.png){width=100%}

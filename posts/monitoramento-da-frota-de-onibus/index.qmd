@@ -1,15 +1,85 @@
 ---
 title: "Monitoramento da Frota de Ônibus"
-autor: "Samuel Andrey"
+author: "Samuel Andrey"
 date: "2025-11-19"
-categories: [maps, code, transport]
+categories: [python, folium, geodata, api, maps]
 image: "image_bus.jpg"
 ---
 
-Descubra a rota e localização de um ônibus.
+Veja as paradas e localização em tempo real de um ônibus utilizando a API da SPTrans. 🚌📍
+
+---
+
+### 1. Configuração e Autenticação
+
+Primeiro, importamos as bibliotecas necessárias. O `folium` será usado para gerar o mapa, `requests` para consumir a API e `dotenv` para carregar nossa credencial de segurança (Token) de um arquivo oculto, garantindo que a chave não fique exposta no código.
+
+Em seguida, iniciamos uma sessão e nos autenticamos na API da SPTrans.
+
+```python
+import os
+import requests
+from folium import Map, Marker, Icon
+from dotenv import load_dotenv
+
+load_dotenv(".env")
+
+s = requests.Session()
+res = s.post(
+    f"http://api.olhovivo.sptrans.com.br/v2.1/Login/Autenticar?token=(http://api.olhovivo.sptrans.com.br/v2.1/Login/Autenticar?token=){os.getenv('SPTRANS_TOKEN')}"
+)
+```
+
+---
+
+### 2. Obtendo a Posição em Tempo Real
+
+Aqui fazemos a requisição para descobrir onde os ônibus da linha **2304** estão neste exato momento. O código extrai a latitude (`py`) e longitude (`px`) do primeiro veículo encontrado na lista de resposta.
+
+```python
+pos = s.get(
+    "http://api.olhovivo.sptrans.com.br/v2.1//Posicao/Linha?codigoLinha=2304(http://api.olhovivo.sptrans.com.br/v2.1//Posicao/Linha?codigoLinha=2304)"
+)
+posicao_atual = pos.json()
+py_bus = posicao_atual["vs"][0]["py"]
+px_bus = posicao_atual["vs"][0]["px"]
+```
+
+---
+
+### 3. Mapeando as Paradas
+
+Além da posição do ônibus, buscamos a lista de todas as paradas dessa linha específica para desenhar o trajeto no mapa.
+
+```python
+res = s.get(
+    "http://api.olhovivo.sptrans.com.br/v2.1/Parada/BuscarParadasPorLinha?codigoLinha=2304(http://api.olhovivo.sptrans.com.br/v2.1/Parada/BuscarParadasPorLinha?codigoLinha=2304)"
+)
+paradas = res.json()
+```
+
+---
+
+### 4. Gerando o Mapa Interativo
+
+Por fim, criamos o mapa centralizado na posição do ônibus. Usamos um laço de repetição (`for`) para adicionar marcadores azuis (padrão) em cada parada. Para o ônibus, adicionamos um marcador especial verde com ícone de ônibus, destacando sua posição atual em relação aos pontos de parada.
+
+```python
+m = Map(location=[py_bus, px_bus], zoom_start=14)
+for i in paradas:
+    Marker(location=[i["py"], i["px"]], popup="PARADA " + i["np"]).add_to(m)
+Marker(location=[py_bus, px_bus], popup="ÔNIBUS", icon=Icon(color='green', icon='bus', prefix='fa')).add_to(m)
+
+m
+```
+
+---
+
+### Código Completo e Resultado
+
+Veja abaixo o código completo em execução e o mapa interativo gerado:
 
 ```{python}
-
 import os
 import requests
 from folium import Map, Marker, Icon
@@ -40,7 +110,4 @@ for i in paradas:
 Marker(location=[py_bus, px_bus], popup="ÔNIBUS", icon=Icon(color='green', icon='bus', prefix='fa')).add_to(m)
 
 m
-
 ```
-
-

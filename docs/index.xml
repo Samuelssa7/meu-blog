@@ -5,14 +5,240 @@
       xmlns:dc="http://purl.org/dc/elements/1.1/" 
       version="2.0">
 <channel>
-<title>codes</title>
+<title>CodesBlog</title>
 <link>https://your-website-url.example.com/</link>
 <atom:link href="https://your-website-url.example.com/index.xml" rel="self" type="application/rss+xml"/>
 <description>A blog built with Quarto</description>
 <generator>quarto-1.8.26</generator>
-<lastBuildDate>Wed, 19 Nov 2025 00:00:00 GMT</lastBuildDate>
+<lastBuildDate>Fri, 21 Nov 2025 00:00:00 GMT</lastBuildDate>
+<item>
+  <title>Regressão Linear: Relação entre Salário e Estudo</title>
+  <dc:creator>Samuel Andrey</dc:creator>
+  <link>https://your-website-url.example.com/posts/regressao-linear/</link>
+  <description><![CDATA[ 
+
+
+
+
+
+
+<p>Veja um gáfico linear analisando anos de estudo e faixa salarial. 📈</p>
+<hr>
+<section id="carregamento-das-bibliotecas-e-dados" class="level3">
+<h3 class="anchored" data-anchor-id="carregamento-das-bibliotecas-e-dados">1. Carregamento das Bibliotecas e Dados</h3>
+<p>Nesta etapa, importamos as bibliotecas necessárias para manipulação de arrays (<code>numpy</code>), dados (<code>pandas</code>) e gráficos (<code>plotnine</code>). Também carregamos os dados de entrada (<code>X.txt</code>) e saída (<code>y.txt</code>).</p>
+<div id="dfd4ae00" class="cell" data-execution_count="1">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb1" style="background: #f1f3f5;"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><span class="im" style="color: #00769E;
+background-color: null;
+font-style: inherit;">import</span> numpy <span class="im" style="color: #00769E;
+background-color: null;
+font-style: inherit;">as</span> np</span>
+<span id="cb1-2"><span class="im" style="color: #00769E;
+background-color: null;
+font-style: inherit;">import</span> pandas <span class="im" style="color: #00769E;
+background-color: null;
+font-style: inherit;">as</span> pd</span>
+<span id="cb1-3"><span class="im" style="color: #00769E;
+background-color: null;
+font-style: inherit;">from</span> plotnine <span class="im" style="color: #00769E;
+background-color: null;
+font-style: inherit;">import</span> ggplot, aes, geom_point, geom_abline, ggsave</span>
+<span id="cb1-4"></span>
+<span id="cb1-5">valores_x <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> np.loadtxt(<span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">'X.txt'</span>)</span>
+<span id="cb1-6">valores_y <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> np.loadtxt(<span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">'y.txt'</span>)</span></code></pre></div></div>
+</div>
+<hr>
+</section>
+<section id="cálculo-dos-coeficientes" class="level3">
+<h3 class="anchored" data-anchor-id="cálculo-dos-coeficientes">2. Cálculo dos Coeficientes</h3>
+<p>Aqui preparamos a matriz adicionando uma coluna de “1s” (<code>para o intercepto</code>) e aplicamos a fórmula da Equação Normal para encontrar os melhores valores para theta. Ao final, separamos o intercepto (<code>a</code>) e a inclinação (<code>b</code>).</p>
+<div id="ba106a49" class="cell" data-execution_count="2">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb2" style="background: #f1f3f5;"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb2-1">X_b <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> np.c_[np.ones((<span class="bu" style="color: null;
+background-color: null;
+font-style: inherit;">len</span>(valores_x), <span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">1</span>)), valores_x]</span>
+<span id="cb2-2">theta_best <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> np.linalg.inv(X_b.T.dot(X_b)).dot(X_b.T).dot(valores_y)</span>
+<span id="cb2-3"></span>
+<span id="cb2-4">a <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> theta_best[<span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">0</span>]</span>
+<span id="cb2-5">b <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> theta_best[<span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">1</span>]</span></code></pre></div></div>
+</div>
+<hr>
+</section>
+<section id="geração-e-salvamento-do-gráfico" class="level3">
+<h3 class="anchored" data-anchor-id="geração-e-salvamento-do-gráfico">3. Geração e Salvamento do Gráfico</h3>
+<p>Com os coeficientes calculados, criamos o gráfico contendo os pontos originais e a reta de regressão (<code>em vermelho</code>). O comando final salva o resultado como uma imagem.</p>
+<div id="cf5f2cbe" class="cell" data-execution_count="3">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb3" style="background: #f1f3f5;"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb3-1">df <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> {<span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"x"</span>: valores_x, <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"y"</span>: valores_y}</span>
+<span id="cb3-2"></span>
+<span id="cb3-3">plot <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> (</span>
+<span id="cb3-4">  ggplot(pd.DataFrame(df), aes(<span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"x"</span>, <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"y"</span>))</span>
+<span id="cb3-5">  <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">+</span> geom_point()</span>
+<span id="cb3-6">  <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">+</span> geom_abline(intercept<span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span>a, slope<span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span>b, color<span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span><span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"red"</span>)</span>
+<span id="cb3-7">)</span>
+<span id="cb3-8"></span>
+<span id="cb3-9">plot.save(<span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"grafico.png"</span>)</span></code></pre></div></div>
+</div>
+<hr>
+</section>
+<section id="código-completo-e-resultado" class="level3">
+<h3 class="anchored" data-anchor-id="código-completo-e-resultado">Código Completo e Resultado</h3>
+<p>Abaixo, o código completo para execução e a imagem gerada:</p>
+<div id="6984b8f5" class="cell" data-execution_count="4">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb4" style="background: #f1f3f5;"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb4-1"><span class="im" style="color: #00769E;
+background-color: null;
+font-style: inherit;">import</span> numpy <span class="im" style="color: #00769E;
+background-color: null;
+font-style: inherit;">as</span> np</span>
+<span id="cb4-2"><span class="im" style="color: #00769E;
+background-color: null;
+font-style: inherit;">import</span> pandas <span class="im" style="color: #00769E;
+background-color: null;
+font-style: inherit;">as</span> pd</span>
+<span id="cb4-3"><span class="im" style="color: #00769E;
+background-color: null;
+font-style: inherit;">from</span> plotnine <span class="im" style="color: #00769E;
+background-color: null;
+font-style: inherit;">import</span> ggplot, aes, geom_point, geom_abline, ggsave</span>
+<span id="cb4-4"></span>
+<span id="cb4-5">valores_x <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> np.loadtxt(<span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">'X.txt'</span>)</span>
+<span id="cb4-6">valores_y <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> np.loadtxt(<span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">'y.txt'</span>)</span>
+<span id="cb4-7"></span>
+<span id="cb4-8">X_b <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> np.c_[np.ones((<span class="bu" style="color: null;
+background-color: null;
+font-style: inherit;">len</span>(valores_x), <span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">1</span>)), valores_x]</span>
+<span id="cb4-9">theta_best <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> np.linalg.inv(X_b.T.dot(X_b)).dot(X_b.T).dot(valores_y)</span>
+<span id="cb4-10"></span>
+<span id="cb4-11">a <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> theta_best[<span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">0</span>]</span>
+<span id="cb4-12">b <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> theta_best[<span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">1</span>]</span>
+<span id="cb4-13"></span>
+<span id="cb4-14">df <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> {<span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"x"</span>: valores_x, <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"y"</span>: valores_y}</span>
+<span id="cb4-15"></span>
+<span id="cb4-16">plot <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> (</span>
+<span id="cb4-17">  ggplot(pd.DataFrame(df), aes(<span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"x"</span>, <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"y"</span>))</span>
+<span id="cb4-18">  <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">+</span> geom_point()</span>
+<span id="cb4-19">  <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">+</span> geom_abline(intercept<span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span>a, slope<span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span>b, color<span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span><span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"red"</span>)</span>
+<span id="cb4-20">)</span>
+<span id="cb4-21"></span>
+<span id="cb4-22">plot.save(<span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"grafico.png"</span>)</span></code></pre></div></div>
+</div>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="https://your-website-url.example.com/posts/regressao-linear/grafico.png" class="img-fluid figure-img" style="width:100.0%"></p>
+<figcaption>Gráfico de Regressão Linear</figcaption>
+</figure>
+</div>
+
+
+</section>
+
+ ]]></description>
+  <category>python</category>
+  <category>data-science</category>
+  <category>statistics</category>
+  <category>plotnine</category>
+  <category>numpy</category>
+  <guid>https://your-website-url.example.com/posts/regressao-linear/</guid>
+  <pubDate>Fri, 21 Nov 2025 00:00:00 GMT</pubDate>
+  <media:content url="https://your-website-url.example.com/posts/regressao-linear/image.jpg" medium="image" type="image/jpeg"/>
+</item>
 <item>
   <title>Monitoramento da Frota de Ônibus</title>
+  <dc:creator>Samuel Andrey</dc:creator>
   <link>https://your-website-url.example.com/posts/monitoramento-da-frota-de-onibus/</link>
   <description><![CDATA[ 
 
@@ -21,9 +247,13 @@
 
 
 
-<p>Descubra a rota e localização de um ônibus.</p>
-<div id="bf2464ad" class="cell" data-execution_count="1">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb1" style="background: #f1f3f5;"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><span class="im" style="color: #00769E;
+<p>Veja as paradas e localização em tempo real de um ônibus utilizando a API da SPTrans. 🚌📍</p>
+<hr>
+<section id="configuração-e-autenticação" class="level3">
+<h3 class="anchored" data-anchor-id="configuração-e-autenticação">1. Configuração e Autenticação</h3>
+<p>Primeiro, importamos as bibliotecas necessárias. O <code>folium</code> será usado para gerar o mapa, <code>requests</code> para consumir a API e <code>dotenv</code> para carregar nossa credencial de segurança (Token) de um arquivo oculto, garantindo que a chave não fique exposta no código.</p>
+<p>Em seguida, iniciamos uma sessão e nos autenticamos na API da SPTrans.</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb1" style="background: #f1f3f5;"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><span class="im" style="color: #00769E;
 background-color: null;
 font-style: inherit;">import</span> os</span>
 <span id="cb1-2"><span class="im" style="color: #00769E;
@@ -52,7 +282,7 @@ background-color: null;
 font-style: inherit;">=</span> s.post(</span>
 <span id="cb1-10">    <span class="ss" style="color: #20794D;
 background-color: null;
-font-style: inherit;">f"http://api.olhovivo.sptrans.com.br/v2.1/Login/Autenticar?token=</span><span class="sc" style="color: #5E5E5E;
+font-style: inherit;">f"http://api.olhovivo.sptrans.com.br/v2.1/Login/Autenticar?token=(http://api.olhovivo.sptrans.com.br/v2.1/Login/Autenticar?token=)</span><span class="sc" style="color: #5E5E5E;
 background-color: null;
 font-style: inherit;">{</span>os<span class="sc" style="color: #5E5E5E;
 background-color: null;
@@ -63,19 +293,23 @@ background-color: null;
 font-style: inherit;">}</span><span class="ss" style="color: #20794D;
 background-color: null;
 font-style: inherit;">"</span></span>
-<span id="cb1-11">)</span>
-<span id="cb1-12"></span>
-<span id="cb1-13">pos <span class="op" style="color: #5E5E5E;
+<span id="cb1-11">)</span></code></pre></div></div>
+<hr>
+</section>
+<section id="obtendo-a-posição-em-tempo-real" class="level3">
+<h3 class="anchored" data-anchor-id="obtendo-a-posição-em-tempo-real">2. Obtendo a Posição em Tempo Real</h3>
+<p>Aqui fazemos a requisição para descobrir onde os ônibus da linha <strong>2304</strong> estão neste exato momento. O código extrai a latitude (<code>py</code>) e longitude (<code>px</code>) do primeiro veículo encontrado na lista de resposta.</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb2" style="background: #f1f3f5;"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb2-1">pos <span class="op" style="color: #5E5E5E;
 background-color: null;
 font-style: inherit;">=</span> s.get(</span>
-<span id="cb1-14">    <span class="st" style="color: #20794D;
+<span id="cb2-2">    <span class="st" style="color: #20794D;
 background-color: null;
-font-style: inherit;">"http://api.olhovivo.sptrans.com.br/v2.1//Posicao/Linha?codigoLinha=2304"</span></span>
-<span id="cb1-15">)</span>
-<span id="cb1-16">posicao_atual <span class="op" style="color: #5E5E5E;
+font-style: inherit;">"http://api.olhovivo.sptrans.com.br/v2.1//Posicao/Linha?codigoLinha=2304(http://api.olhovivo.sptrans.com.br/v2.1//Posicao/Linha?codigoLinha=2304)"</span></span>
+<span id="cb2-3">)</span>
+<span id="cb2-4">posicao_atual <span class="op" style="color: #5E5E5E;
 background-color: null;
 font-style: inherit;">=</span> pos.json()</span>
-<span id="cb1-17">py_bus <span class="op" style="color: #5E5E5E;
+<span id="cb2-5">py_bus <span class="op" style="color: #5E5E5E;
 background-color: null;
 font-style: inherit;">=</span> posicao_atual[<span class="st" style="color: #20794D;
 background-color: null;
@@ -84,7 +318,7 @@ background-color: null;
 font-style: inherit;">0</span>][<span class="st" style="color: #20794D;
 background-color: null;
 font-style: inherit;">"py"</span>]</span>
-<span id="cb1-18">px_bus <span class="op" style="color: #5E5E5E;
+<span id="cb2-6">px_bus <span class="op" style="color: #5E5E5E;
 background-color: null;
 font-style: inherit;">=</span> posicao_atual[<span class="st" style="color: #20794D;
 background-color: null;
@@ -92,20 +326,28 @@ font-style: inherit;">"vs"</span>][<span class="dv" style="color: #AD0000;
 background-color: null;
 font-style: inherit;">0</span>][<span class="st" style="color: #20794D;
 background-color: null;
-font-style: inherit;">"px"</span>]</span>
-<span id="cb1-19"></span>
-<span id="cb1-20">res <span class="op" style="color: #5E5E5E;
+font-style: inherit;">"px"</span>]</span></code></pre></div></div>
+<hr>
+</section>
+<section id="mapeando-as-paradas" class="level3">
+<h3 class="anchored" data-anchor-id="mapeando-as-paradas">3. Mapeando as Paradas</h3>
+<p>Além da posição do ônibus, buscamos a lista de todas as paradas dessa linha específica para desenhar o trajeto no mapa.</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb3" style="background: #f1f3f5;"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb3-1">res <span class="op" style="color: #5E5E5E;
 background-color: null;
 font-style: inherit;">=</span> s.get(</span>
-<span id="cb1-21">    <span class="st" style="color: #20794D;
+<span id="cb3-2">    <span class="st" style="color: #20794D;
 background-color: null;
-font-style: inherit;">"http://api.olhovivo.sptrans.com.br/v2.1/Parada/BuscarParadasPorLinha?codigoLinha=2304"</span></span>
-<span id="cb1-22">)</span>
-<span id="cb1-23">paradas <span class="op" style="color: #5E5E5E;
+font-style: inherit;">"http://api.olhovivo.sptrans.com.br/v2.1/Parada/BuscarParadasPorLinha?codigoLinha=2304(http://api.olhovivo.sptrans.com.br/v2.1/Parada/BuscarParadasPorLinha?codigoLinha=2304)"</span></span>
+<span id="cb3-3">)</span>
+<span id="cb3-4">paradas <span class="op" style="color: #5E5E5E;
 background-color: null;
-font-style: inherit;">=</span> res.json()</span>
-<span id="cb1-24"></span>
-<span id="cb1-25">m <span class="op" style="color: #5E5E5E;
+font-style: inherit;">=</span> res.json()</span></code></pre></div></div>
+<hr>
+</section>
+<section id="gerando-o-mapa-interativo" class="level3">
+<h3 class="anchored" data-anchor-id="gerando-o-mapa-interativo">4. Gerando o Mapa Interativo</h3>
+<p>Por fim, criamos o mapa centralizado na posição do ônibus. Usamos um laço de repetição (<code>for</code>) para adicionar marcadores azuis (padrão) em cada parada. Para o ônibus, adicionamos um marcador especial verde com ícone de ônibus, destacando sua posição atual em relação aos pontos de parada.</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb4" style="background: #f1f3f5;"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb4-1">m <span class="op" style="color: #5E5E5E;
 background-color: null;
 font-style: inherit;">=</span> Map(location<span class="op" style="color: #5E5E5E;
 background-color: null;
@@ -114,14 +356,14 @@ background-color: null;
 font-style: inherit;">=</span><span class="dv" style="color: #AD0000;
 background-color: null;
 font-style: inherit;">14</span>)</span>
-<span id="cb1-26"><span class="cf" style="color: #003B4F;
+<span id="cb4-2"><span class="cf" style="color: #003B4F;
 background-color: null;
 font-weight: bold;
 font-style: inherit;">for</span> i <span class="kw" style="color: #003B4F;
 background-color: null;
 font-weight: bold;
 font-style: inherit;">in</span> paradas:</span>
-<span id="cb1-27">    Marker(location<span class="op" style="color: #5E5E5E;
+<span id="cb4-3">    Marker(location<span class="op" style="color: #5E5E5E;
 background-color: null;
 font-style: inherit;">=</span>[i[<span class="st" style="color: #20794D;
 background-color: null;
@@ -136,7 +378,7 @@ background-color: null;
 font-style: inherit;">+</span> i[<span class="st" style="color: #20794D;
 background-color: null;
 font-style: inherit;">"np"</span>]).add_to(m)</span>
-<span id="cb1-28">Marker(location<span class="op" style="color: #5E5E5E;
+<span id="cb4-4">Marker(location<span class="op" style="color: #5E5E5E;
 background-color: null;
 font-style: inherit;">=</span>[py_bus, px_bus], popup<span class="op" style="color: #5E5E5E;
 background-color: null;
@@ -157,8 +399,150 @@ background-color: null;
 font-style: inherit;">=</span><span class="st" style="color: #20794D;
 background-color: null;
 font-style: inherit;">'fa'</span>)).add_to(m)</span>
-<span id="cb1-29"></span>
-<span id="cb1-30">m</span></code></pre></div></div>
+<span id="cb4-5"></span>
+<span id="cb4-6">m</span></code></pre></div></div>
+<hr>
+</section>
+<section id="código-completo-e-resultado" class="level3">
+<h3 class="anchored" data-anchor-id="código-completo-e-resultado">Código Completo e Resultado</h3>
+<p>Veja abaixo o código completo em execução e o mapa interativo gerado:</p>
+<div id="57489488" class="cell" data-execution_count="1">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb5" style="background: #f1f3f5;"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb5-1"><span class="im" style="color: #00769E;
+background-color: null;
+font-style: inherit;">import</span> os</span>
+<span id="cb5-2"><span class="im" style="color: #00769E;
+background-color: null;
+font-style: inherit;">import</span> requests</span>
+<span id="cb5-3"><span class="im" style="color: #00769E;
+background-color: null;
+font-style: inherit;">from</span> folium <span class="im" style="color: #00769E;
+background-color: null;
+font-style: inherit;">import</span> Map, Marker, Icon</span>
+<span id="cb5-4"><span class="im" style="color: #00769E;
+background-color: null;
+font-style: inherit;">from</span> dotenv <span class="im" style="color: #00769E;
+background-color: null;
+font-style: inherit;">import</span> load_dotenv</span>
+<span id="cb5-5"></span>
+<span id="cb5-6">load_dotenv(<span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">".env"</span>)</span>
+<span id="cb5-7"></span>
+<span id="cb5-8">s <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> requests.Session()</span>
+<span id="cb5-9">res <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> s.post(</span>
+<span id="cb5-10">    <span class="ss" style="color: #20794D;
+background-color: null;
+font-style: inherit;">f"http://api.olhovivo.sptrans.com.br/v2.1/Login/Autenticar?token=</span><span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">{</span>os<span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">.</span>getenv(<span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">'SPTRANS_TOKEN'</span>)<span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">}</span><span class="ss" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"</span></span>
+<span id="cb5-11">)</span>
+<span id="cb5-12"></span>
+<span id="cb5-13">pos <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> s.get(</span>
+<span id="cb5-14">    <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"http://api.olhovivo.sptrans.com.br/v2.1//Posicao/Linha?codigoLinha=2304"</span></span>
+<span id="cb5-15">)</span>
+<span id="cb5-16">posicao_atual <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> pos.json()</span>
+<span id="cb5-17">py_bus <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> posicao_atual[<span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"vs"</span>][<span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">0</span>][<span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"py"</span>]</span>
+<span id="cb5-18">px_bus <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> posicao_atual[<span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"vs"</span>][<span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">0</span>][<span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"px"</span>]</span>
+<span id="cb5-19"></span>
+<span id="cb5-20">res <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> s.get(</span>
+<span id="cb5-21">    <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"http://api.olhovivo.sptrans.com.br/v2.1/Parada/BuscarParadasPorLinha?codigoLinha=2304"</span></span>
+<span id="cb5-22">)</span>
+<span id="cb5-23">paradas <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> res.json()</span>
+<span id="cb5-24"></span>
+<span id="cb5-25">m <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> Map(location<span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span>[py_bus, px_bus], zoom_start<span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span><span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">14</span>)</span>
+<span id="cb5-26"><span class="cf" style="color: #003B4F;
+background-color: null;
+font-weight: bold;
+font-style: inherit;">for</span> i <span class="kw" style="color: #003B4F;
+background-color: null;
+font-weight: bold;
+font-style: inherit;">in</span> paradas:</span>
+<span id="cb5-27">    Marker(location<span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span>[i[<span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"py"</span>], i[<span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"px"</span>]], popup<span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span><span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"PARADA "</span> <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">+</span> i[<span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"np"</span>]).add_to(m)</span>
+<span id="cb5-28">Marker(location<span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span>[py_bus, px_bus], popup<span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span><span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"ÔNIBUS"</span>, icon<span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span>Icon(color<span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span><span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">'green'</span>, icon<span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span><span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">'bus'</span>, prefix<span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span><span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">'fa'</span>)).add_to(m)</span>
+<span id="cb5-29"></span>
+<span id="cb5-30">m</span></code></pre></div></div>
 <div class="cell-output cell-output-display" data-execution_count="1">
 <div style="width:100%;"><div style="position:relative;width:100%;height:0;padding-bottom:60%;"><span style="color:#565656">Make this Notebook Trusted to load map: File -&gt; Trust Notebook</span><iframe srcdoc="<!DOCTYPE html>
 <html>
@@ -179,7 +563,7 @@ font-style: inherit;">'fa'</span>)).add_to(m)</span>
             <meta name=&quot;viewport&quot; content=&quot;width=device-width,
                 initial-scale=1.0, maximum-scale=1.0, user-scalable=no&quot; />
             <style>
-                #map_facd0217358ce6e7035bbfa11ac62fa7 {
+                #map_d488caf5a90ff3b86fc5c7637d6ba25b {
                     position: relative;
                     width: 100.0%;
                     height: 100.0%;
@@ -216,16 +600,16 @@ font-style: inherit;">'fa'</span>)).add_to(m)</span>
 <body>
     
     
-            <div class=&quot;folium-map&quot; id=&quot;map_facd0217358ce6e7035bbfa11ac62fa7&quot; ></div>
+            <div class=&quot;folium-map&quot; id=&quot;map_d488caf5a90ff3b86fc5c7637d6ba25b&quot; ></div>
         
 </body>
 <script>
     
     
-            var map_facd0217358ce6e7035bbfa11ac62fa7 = L.map(
-                &quot;map_facd0217358ce6e7035bbfa11ac62fa7&quot;,
+            var map_d488caf5a90ff3b86fc5c7637d6ba25b = L.map(
+                &quot;map_d488caf5a90ff3b86fc5c7637d6ba25b&quot;,
                 {
-                    center: [-23.48940525, -46.69845125],
+                    center: [-23.515027500000002, -46.698626],
                     crs: L.CRS.EPSG3857,
                     ...{
   &quot;zoom&quot;: 14,
@@ -240,7 +624,7 @@ font-style: inherit;">'fa'</span>)).add_to(m)</span>
 
         
     
-            var tile_layer_51765fbcde17d272ae3533e112d2c54c = L.tileLayer(
+            var tile_layer_5045c374704fa1cd9c4e705292a1dfb9 = L.tileLayer(
                 &quot;https://tile.openstreetmap.org/{z}/{x}/{y}.png&quot;,
                 {
   &quot;minZoom&quot;: 0,
@@ -257,257 +641,257 @@ font-style: inherit;">'fa'</span>)).add_to(m)</span>
             );
         
     
-            tile_layer_51765fbcde17d272ae3533e112d2c54c.addTo(map_facd0217358ce6e7035bbfa11ac62fa7);
+            tile_layer_5045c374704fa1cd9c4e705292a1dfb9.addTo(map_d488caf5a90ff3b86fc5c7637d6ba25b);
         
     
-            var marker_af50aea7f8538e9a9d06ceaaa6f127e2 = L.marker(
+            var marker_dbd1736668fc6359b080f1a73d41ed1d = L.marker(
                 [-23.525799, -46.679251],
                 {
 }
-            ).addTo(map_facd0217358ce6e7035bbfa11ac62fa7);
+            ).addTo(map_d488caf5a90ff3b86fc5c7637d6ba25b);
         
     
-        var popup_cb4458aaee1d3f518d5e6d5baa7e93cd = L.popup({
+        var popup_cc40582d3062b09e1c146964502f90f6 = L.popup({
   &quot;maxWidth&quot;: &quot;100%&quot;,
 });
 
         
             
-                var html_3ded32cc612ac71a104e8090eb8366f1 = $(`<div id=&quot;html_3ded32cc612ac71a104e8090eb8366f1&quot; style=&quot;width: 100.0%; height: 100.0%;&quot;>PARADA PARADA PALMEIRAS B/C</div>`)[0];
-                popup_cb4458aaee1d3f518d5e6d5baa7e93cd.setContent(html_3ded32cc612ac71a104e8090eb8366f1);
+                var html_d4a7072aa7ec5f1ef3f1aa2aabe44265 = $(`<div id=&quot;html_d4a7072aa7ec5f1ef3f1aa2aabe44265&quot; style=&quot;width: 100.0%; height: 100.0%;&quot;>PARADA PARADA PALMEIRAS B/C</div>`)[0];
+                popup_cc40582d3062b09e1c146964502f90f6.setContent(html_d4a7072aa7ec5f1ef3f1aa2aabe44265);
             
         
 
-        marker_af50aea7f8538e9a9d06ceaaa6f127e2.bindPopup(popup_cb4458aaee1d3f518d5e6d5baa7e93cd)
+        marker_dbd1736668fc6359b080f1a73d41ed1d.bindPopup(popup_cc40582d3062b09e1c146964502f90f6)
         ;
 
         
     
     
-            var marker_287f89e2b268c5b0dcd8ee22bb314121 = L.marker(
+            var marker_83fe86849155f60f4f577e96992d9cc1 = L.marker(
                 [-23.511052, -46.705493],
                 {
 }
-            ).addTo(map_facd0217358ce6e7035bbfa11ac62fa7);
+            ).addTo(map_d488caf5a90ff3b86fc5c7637d6ba25b);
         
     
-        var popup_69b2326c9081311b95b76742fbd6d526 = L.popup({
+        var popup_62f78f4c69f64cbd3446034011bfac12 = L.popup({
   &quot;maxWidth&quot;: &quot;100%&quot;,
 });
 
         
             
-                var html_4557d32abe542f12598cbb10c9218aa9 = $(`<div id=&quot;html_4557d32abe542f12598cbb10c9218aa9&quot; style=&quot;width: 100.0%; height: 100.0%;&quot;>PARADA MARGINAL B/C</div>`)[0];
-                popup_69b2326c9081311b95b76742fbd6d526.setContent(html_4557d32abe542f12598cbb10c9218aa9);
+                var html_05227a442d4d50bcc00468a6e2fbca5f = $(`<div id=&quot;html_05227a442d4d50bcc00468a6e2fbca5f&quot; style=&quot;width: 100.0%; height: 100.0%;&quot;>PARADA MARGINAL B/C</div>`)[0];
+                popup_62f78f4c69f64cbd3446034011bfac12.setContent(html_05227a442d4d50bcc00468a6e2fbca5f);
             
         
 
-        marker_287f89e2b268c5b0dcd8ee22bb314121.bindPopup(popup_69b2326c9081311b95b76742fbd6d526)
+        marker_83fe86849155f60f4f577e96992d9cc1.bindPopup(popup_62f78f4c69f64cbd3446034011bfac12)
         ;
 
         
     
     
-            var marker_18f24f83b20f4b17ffc66f1733b0df02 = L.marker(
+            var marker_938ecf1309f0488e9a21d39f2a1c9509 = L.marker(
                 [-23.514036, -46.702259],
                 {
 }
-            ).addTo(map_facd0217358ce6e7035bbfa11ac62fa7);
+            ).addTo(map_d488caf5a90ff3b86fc5c7637d6ba25b);
         
     
-        var popup_0a3255f1272530c24481195a73626210 = L.popup({
+        var popup_6e725a092f7b3d9b502bd3ea38306b6d = L.popup({
   &quot;maxWidth&quot;: &quot;100%&quot;,
 });
 
         
             
-                var html_bf91e15e65e5ae57f683f413bb53723c = $(`<div id=&quot;html_bf91e15e65e5ae57f683f413bb53723c&quot; style=&quot;width: 100.0%; height: 100.0%;&quot;>PARADA JOSE MARIA B/C</div>`)[0];
-                popup_0a3255f1272530c24481195a73626210.setContent(html_bf91e15e65e5ae57f683f413bb53723c);
+                var html_d30b99d39b6db69ee6eba2964764b0de = $(`<div id=&quot;html_d30b99d39b6db69ee6eba2964764b0de&quot; style=&quot;width: 100.0%; height: 100.0%;&quot;>PARADA JOSE MARIA B/C</div>`)[0];
+                popup_6e725a092f7b3d9b502bd3ea38306b6d.setContent(html_d30b99d39b6db69ee6eba2964764b0de);
             
         
 
-        marker_18f24f83b20f4b17ffc66f1733b0df02.bindPopup(popup_0a3255f1272530c24481195a73626210)
+        marker_938ecf1309f0488e9a21d39f2a1c9509.bindPopup(popup_6e725a092f7b3d9b502bd3ea38306b6d)
         ;
 
         
     
     
-            var marker_44111a677d7f34c570485942593d7336 = L.marker(
+            var marker_b0dc639c512ffef8053b69dcc1d6a9dc = L.marker(
                 [-23.516592, -46.698575],
                 {
 }
-            ).addTo(map_facd0217358ce6e7035bbfa11ac62fa7);
+            ).addTo(map_d488caf5a90ff3b86fc5c7637d6ba25b);
         
     
-        var popup_8dd4837fdaea0b6cd25a8f9b5ceed8c6 = L.popup({
+        var popup_157eacd0a6f8665b49c316902e2a7e03 = L.popup({
   &quot;maxWidth&quot;: &quot;100%&quot;,
 });
 
         
             
-                var html_8a3397d36d638c0c49bd0c74d5932d6d = $(`<div id=&quot;html_8a3397d36d638c0c49bd0c74d5932d6d&quot; style=&quot;width: 100.0%; height: 100.0%;&quot;>PARADA ZANELLA B/C</div>`)[0];
-                popup_8dd4837fdaea0b6cd25a8f9b5ceed8c6.setContent(html_8a3397d36d638c0c49bd0c74d5932d6d);
+                var html_7691d735e34b6daf10aea49c430cb955 = $(`<div id=&quot;html_7691d735e34b6daf10aea49c430cb955&quot; style=&quot;width: 100.0%; height: 100.0%;&quot;>PARADA ZANELLA B/C</div>`)[0];
+                popup_157eacd0a6f8665b49c316902e2a7e03.setContent(html_7691d735e34b6daf10aea49c430cb955);
             
         
 
-        marker_44111a677d7f34c570485942593d7336.bindPopup(popup_8dd4837fdaea0b6cd25a8f9b5ceed8c6)
+        marker_b0dc639c512ffef8053b69dcc1d6a9dc.bindPopup(popup_157eacd0a6f8665b49c316902e2a7e03)
         ;
 
         
     
     
-            var marker_70813385710017cdb1c04257d7436701 = L.marker(
+            var marker_8c3643e2aa9bdb360425064df874662e = L.marker(
                 [-23.52494, -46.698995],
                 {
 }
-            ).addTo(map_facd0217358ce6e7035bbfa11ac62fa7);
+            ).addTo(map_d488caf5a90ff3b86fc5c7637d6ba25b);
         
     
-        var popup_61ddf4a3beacd83b191bf2e2920a5864 = L.popup({
+        var popup_3a6ba6088a6296810dc674ac06472517 = L.popup({
   &quot;maxWidth&quot;: &quot;100%&quot;,
 });
 
         
             
-                var html_d43195c00280768c9f3a963512560e45 = $(`<div id=&quot;html_d43195c00280768c9f3a963512560e45&quot; style=&quot;width: 100.0%; height: 100.0%;&quot;>PARADA SCIPIAO B/C</div>`)[0];
-                popup_61ddf4a3beacd83b191bf2e2920a5864.setContent(html_d43195c00280768c9f3a963512560e45);
+                var html_e0f3496abf7ba2eaec554f5bfb650da8 = $(`<div id=&quot;html_e0f3496abf7ba2eaec554f5bfb650da8&quot; style=&quot;width: 100.0%; height: 100.0%;&quot;>PARADA SCIPIAO B/C</div>`)[0];
+                popup_3a6ba6088a6296810dc674ac06472517.setContent(html_e0f3496abf7ba2eaec554f5bfb650da8);
             
         
 
-        marker_70813385710017cdb1c04257d7436701.bindPopup(popup_61ddf4a3beacd83b191bf2e2920a5864)
+        marker_8c3643e2aa9bdb360425064df874662e.bindPopup(popup_3a6ba6088a6296810dc674ac06472517)
         ;
 
         
     
     
-            var marker_b745a39fe89fc27ea2fc5127911fbbc6 = L.marker(
+            var marker_aae4f3664f2b39f99c58bf8e33ea97d6 = L.marker(
                 [-23.524994, -46.695297],
                 {
 }
-            ).addTo(map_facd0217358ce6e7035bbfa11ac62fa7);
+            ).addTo(map_d488caf5a90ff3b86fc5c7637d6ba25b);
         
     
-        var popup_2be6a4bacb8421e62eacdd391893de55 = L.popup({
+        var popup_2617055a0c74f832c09fd07b0e44c0cc = L.popup({
   &quot;maxWidth&quot;: &quot;100%&quot;,
 });
 
         
             
-                var html_1e57e9b367b846ad58758972ffa5d851 = $(`<div id=&quot;html_1e57e9b367b846ad58758972ffa5d851&quot; style=&quot;width: 100.0%; height: 100.0%;&quot;>PARADA VESPASIANO B/C</div>`)[0];
-                popup_2be6a4bacb8421e62eacdd391893de55.setContent(html_1e57e9b367b846ad58758972ffa5d851);
+                var html_67239bd4bfda24c656e2f3eb5b3459f8 = $(`<div id=&quot;html_67239bd4bfda24c656e2f3eb5b3459f8&quot; style=&quot;width: 100.0%; height: 100.0%;&quot;>PARADA VESPASIANO B/C</div>`)[0];
+                popup_2617055a0c74f832c09fd07b0e44c0cc.setContent(html_67239bd4bfda24c656e2f3eb5b3459f8);
             
         
 
-        marker_b745a39fe89fc27ea2fc5127911fbbc6.bindPopup(popup_2be6a4bacb8421e62eacdd391893de55)
+        marker_aae4f3664f2b39f99c58bf8e33ea97d6.bindPopup(popup_2617055a0c74f832c09fd07b0e44c0cc)
         ;
 
         
     
     
-            var marker_bd771701f3893c7af00f1d0e131020e0 = L.marker(
+            var marker_3bf6e284a8dae006bc5bc8f0ca59716a = L.marker(
                 [-23.525029, -46.690074],
                 {
 }
-            ).addTo(map_facd0217358ce6e7035bbfa11ac62fa7);
+            ).addTo(map_d488caf5a90ff3b86fc5c7637d6ba25b);
         
     
-        var popup_f4d392af30c34f81985d8b464a01d34a = L.popup({
+        var popup_ffe60b7de94ee78783bdb713d01fe13f = L.popup({
   &quot;maxWidth&quot;: &quot;100%&quot;,
 });
 
         
             
-                var html_e79f2a3ccb4cb4a5bf48ae9fc97866dc = $(`<div id=&quot;html_e79f2a3ccb4cb4a5bf48ae9fc97866dc&quot; style=&quot;width: 100.0%; height: 100.0%;&quot;>PARADA CORNELIA</div>`)[0];
-                popup_f4d392af30c34f81985d8b464a01d34a.setContent(html_e79f2a3ccb4cb4a5bf48ae9fc97866dc);
+                var html_88af1ebeb04b63fbaa88f0dcdc7ca781 = $(`<div id=&quot;html_88af1ebeb04b63fbaa88f0dcdc7ca781&quot; style=&quot;width: 100.0%; height: 100.0%;&quot;>PARADA CORNELIA</div>`)[0];
+                popup_ffe60b7de94ee78783bdb713d01fe13f.setContent(html_88af1ebeb04b63fbaa88f0dcdc7ca781);
             
         
 
-        marker_bd771701f3893c7af00f1d0e131020e0.bindPopup(popup_f4d392af30c34f81985d8b464a01d34a)
+        marker_3bf6e284a8dae006bc5bc8f0ca59716a.bindPopup(popup_ffe60b7de94ee78783bdb713d01fe13f)
         ;
 
         
     
     
-            var marker_674b0348c7f06ba240d0eeb36740a251 = L.marker(
+            var marker_231a20c8573e35706a690373ebb9f71b = L.marker(
                 [-23.52517, -46.683408],
                 {
 }
-            ).addTo(map_facd0217358ce6e7035bbfa11ac62fa7);
+            ).addTo(map_d488caf5a90ff3b86fc5c7637d6ba25b);
         
     
-        var popup_6005837b2033b20f870b6bfa40294d7f = L.popup({
+        var popup_7cb10013b1df215b1cb7e6ff1988f577 = L.popup({
   &quot;maxWidth&quot;: &quot;100%&quot;,
 });
 
         
             
-                var html_03f08e8f644e8cf7b4ee78ba6ff33af0 = $(`<div id=&quot;html_03f08e8f644e8cf7b4ee78ba6ff33af0&quot; style=&quot;width: 100.0%; height: 100.0%;&quot;>PARADA SESC POMPEIA B/C</div>`)[0];
-                popup_6005837b2033b20f870b6bfa40294d7f.setContent(html_03f08e8f644e8cf7b4ee78ba6ff33af0);
+                var html_de5cd453028bf07c4fb641df9d422fbd = $(`<div id=&quot;html_de5cd453028bf07c4fb641df9d422fbd&quot; style=&quot;width: 100.0%; height: 100.0%;&quot;>PARADA SESC POMPEIA B/C</div>`)[0];
+                popup_7cb10013b1df215b1cb7e6ff1988f577.setContent(html_de5cd453028bf07c4fb641df9d422fbd);
             
         
 
-        marker_674b0348c7f06ba240d0eeb36740a251.bindPopup(popup_6005837b2033b20f870b6bfa40294d7f)
+        marker_231a20c8573e35706a690373ebb9f71b.bindPopup(popup_7cb10013b1df215b1cb7e6ff1988f577)
         ;
 
         
     
     
-            var marker_1d16765283958c28165d5072aef3dcb8 = L.marker(
+            var marker_76404767c53b2261daabe254e94da1ec = L.marker(
                 [-23.500896, -46.706633],
                 {
 }
-            ).addTo(map_facd0217358ce6e7035bbfa11ac62fa7);
+            ).addTo(map_d488caf5a90ff3b86fc5c7637d6ba25b);
         
     
-        var popup_715ee6f2e66690ab9831aa0b7accc7e0 = L.popup({
+        var popup_d0d7ecf725303e7b4b8619157723e2fb = L.popup({
   &quot;maxWidth&quot;: &quot;100%&quot;,
 });
 
         
             
-                var html_6bbbef3c01ac8ceb240c04580ae352e2 = $(`<div id=&quot;html_6bbbef3c01ac8ceb240c04580ae352e2&quot; style=&quot;width: 100.0%; height: 100.0%;&quot;>PARADA PAULA FERREIRA B/C</div>`)[0];
-                popup_715ee6f2e66690ab9831aa0b7accc7e0.setContent(html_6bbbef3c01ac8ceb240c04580ae352e2);
+                var html_de93f13c2e1b831ff460bab3f5c53e42 = $(`<div id=&quot;html_de93f13c2e1b831ff460bab3f5c53e42&quot; style=&quot;width: 100.0%; height: 100.0%;&quot;>PARADA PAULA FERREIRA B/C</div>`)[0];
+                popup_d0d7ecf725303e7b4b8619157723e2fb.setContent(html_de93f13c2e1b831ff460bab3f5c53e42);
             
         
 
-        marker_1d16765283958c28165d5072aef3dcb8.bindPopup(popup_715ee6f2e66690ab9831aa0b7accc7e0)
+        marker_76404767c53b2261daabe254e94da1ec.bindPopup(popup_d0d7ecf725303e7b4b8619157723e2fb)
         ;
 
         
     
     
-            var marker_4c3235aa6ecad011467dfcd3512f32d3 = L.marker(
+            var marker_862b9e2043077869b2c0556b651a6c74 = L.marker(
                 [-23.50616, -46.706061],
                 {
 }
-            ).addTo(map_facd0217358ce6e7035bbfa11ac62fa7);
+            ).addTo(map_d488caf5a90ff3b86fc5c7637d6ba25b);
         
     
-        var popup_5ef78443b789426e2ad30cb6b549fe19 = L.popup({
+        var popup_1905d2bc736aa3824f6893081c291478 = L.popup({
   &quot;maxWidth&quot;: &quot;100%&quot;,
 });
 
         
             
-                var html_bf4aade4320a49a44516ecd25c14a741 = $(`<div id=&quot;html_bf4aade4320a49a44516ecd25c14a741&quot; style=&quot;width: 100.0%; height: 100.0%;&quot;>PARADA PIQUERI B/C</div>`)[0];
-                popup_5ef78443b789426e2ad30cb6b549fe19.setContent(html_bf4aade4320a49a44516ecd25c14a741);
+                var html_aa01531771b963d9f17bb20cca201b99 = $(`<div id=&quot;html_aa01531771b963d9f17bb20cca201b99&quot; style=&quot;width: 100.0%; height: 100.0%;&quot;>PARADA PIQUERI B/C</div>`)[0];
+                popup_1905d2bc736aa3824f6893081c291478.setContent(html_aa01531771b963d9f17bb20cca201b99);
             
         
 
-        marker_4c3235aa6ecad011467dfcd3512f32d3.bindPopup(popup_5ef78443b789426e2ad30cb6b549fe19)
+        marker_862b9e2043077869b2c0556b651a6c74.bindPopup(popup_1905d2bc736aa3824f6893081c291478)
         ;
 
         
     
     
-            var marker_53d11bb90c844f800e572ffed8156f44 = L.marker(
-                [-23.48940525, -46.69845125],
+            var marker_cec10aade0d2290ce0f2ad4468b4abab = L.marker(
+                [-23.515027500000002, -46.698626],
                 {
 }
-            ).addTo(map_facd0217358ce6e7035bbfa11ac62fa7);
+            ).addTo(map_d488caf5a90ff3b86fc5c7637d6ba25b);
         
     
-            var icon_bdc172fed1a1d2ea14164eb5e6929c00 = L.AwesomeMarkers.icon(
+            var icon_305c35fa52d9360edf49610b29b683af = L.AwesomeMarkers.icon(
                 {
   &quot;markerColor&quot;: &quot;green&quot;,
   &quot;iconColor&quot;: &quot;white&quot;,
@@ -518,24 +902,24 @@ font-style: inherit;">'fa'</span>)).add_to(m)</span>
             );
         
     
-        var popup_661027ca55dec55470e67749c0bf3f15 = L.popup({
+        var popup_1b4079e5326da4e01f624f7fa50ec2e2 = L.popup({
   &quot;maxWidth&quot;: &quot;100%&quot;,
 });
 
         
             
-                var html_b316b705eeac25b94fc53cc92b8749c8 = $(`<div id=&quot;html_b316b705eeac25b94fc53cc92b8749c8&quot; style=&quot;width: 100.0%; height: 100.0%;&quot;>ÔNIBUS</div>`)[0];
-                popup_661027ca55dec55470e67749c0bf3f15.setContent(html_b316b705eeac25b94fc53cc92b8749c8);
+                var html_1b00164944962ba80d13c8ed6d97c1b5 = $(`<div id=&quot;html_1b00164944962ba80d13c8ed6d97c1b5&quot; style=&quot;width: 100.0%; height: 100.0%;&quot;>ÔNIBUS</div>`)[0];
+                popup_1b4079e5326da4e01f624f7fa50ec2e2.setContent(html_1b00164944962ba80d13c8ed6d97c1b5);
             
         
 
-        marker_53d11bb90c844f800e572ffed8156f44.bindPopup(popup_661027ca55dec55470e67749c0bf3f15)
+        marker_cec10aade0d2290ce0f2ad4468b4abab.bindPopup(popup_1b4079e5326da4e01f624f7fa50ec2e2)
         ;
 
         
     
     
-                marker_53d11bb90c844f800e572ffed8156f44.setIcon(icon_bdc172fed1a1d2ea14164eb5e6929c00);
+                marker_cec10aade0d2290ce0f2ad4468b4abab.setIcon(icon_305c35fa52d9360edf49610b29b683af);
             
 </script>
 </html>" style="position:absolute;width:100%;height:100%;left:0;top:0;border:none !important;" allowfullscreen="" webkitallowfullscreen="" mozallowfullscreen=""></iframe></div></div>
@@ -543,17 +927,21 @@ font-style: inherit;">'fa'</span>)).add_to(m)</span>
 </div>
 
 
+</section>
 
  ]]></description>
+  <category>python</category>
+  <category>folium</category>
+  <category>geodata</category>
+  <category>api</category>
   <category>maps</category>
-  <category>code</category>
-  <category>transport</category>
   <guid>https://your-website-url.example.com/posts/monitoramento-da-frota-de-onibus/</guid>
   <pubDate>Wed, 19 Nov 2025 00:00:00 GMT</pubDate>
   <media:content url="https://your-website-url.example.com/posts/monitoramento-da-frota-de-onibus/image_bus.jpg" medium="image" type="image/jpeg"/>
 </item>
 <item>
-  <title>Cotação do Dólar</title>
+  <title>Análise do Dólar com Python e API do Banco Central</title>
+  <dc:creator>Samuel Andrey</dc:creator>
   <link>https://your-website-url.example.com/posts/cotacao-do-dolar/</link>
   <description><![CDATA[ 
 
@@ -563,8 +951,11 @@ font-style: inherit;">'fa'</span>)).add_to(m)</span>
 
 
 <p>Veja a variação do preço do dólar no período de 11/2024 💵💹</p>
-<div id="20e9ad84" class="cell" data-execution_count="1">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb1" style="background: #f1f3f5;"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><span class="im" style="color: #00769E;
+<hr>
+<section id="importação-das-bibliotecas" class="level3">
+<h3 class="anchored" data-anchor-id="importação-das-bibliotecas">Importação das Bibliotecas</h3>
+<p>Para iniciar nossa análise, precisamos importar as ferramentas necessárias. Utilizaremos o <code>calendar</code> e <code>datetime</code> para manipulação de datas, <code>requests</code> para acessar a API do Banco Central, <code>pandas</code> para tratar os dados em formato tabular e <code>plotly.express</code> para a visualização gráfica.</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb1" style="background: #f1f3f5;"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><span class="im" style="color: #00769E;
 background-color: null;
 font-style: inherit;">import</span> calendar</span>
 <span id="cb1-2"><span class="im" style="color: #00769E;
@@ -584,29 +975,37 @@ font-style: inherit;">as</span> px</span>
 background-color: null;
 font-style: inherit;">from</span> datetime <span class="im" style="color: #00769E;
 background-color: null;
-font-style: inherit;">import</span> datetime</span>
-<span id="cb1-6"></span>
-<span id="cb1-7"><span class="kw" style="color: #003B4F;
+font-style: inherit;">import</span> datetime</span></code></pre></div></div>
+<hr>
+</section>
+<section id="definição-do-período-de-análise" class="level3">
+<h3 class="anchored" data-anchor-id="definição-do-período-de-análise">Definição do Período de Análise</h3>
+<p>Aqui definimos a função principal que recebe a string com mês e ano (ex: “112024”). O código calcula automaticamente o primeiro e o último dia do mês selecionado para preparar a consulta à API.</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb2" style="background: #f1f3f5;"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb2-1"><span class="kw" style="color: #003B4F;
 background-color: null;
 font-weight: bold;
 font-style: inherit;">def</span> gerar_grafico_dolar(data_str):</span>
-<span id="cb1-8">    first_date <span class="op" style="color: #5E5E5E;
+<span id="cb2-2">    first_date <span class="op" style="color: #5E5E5E;
 background-color: null;
 font-style: inherit;">=</span> datetime.strptime(data_str, <span class="st" style="color: #20794D;
 background-color: null;
 font-style: inherit;">"%m%Y"</span>)</span>
-<span id="cb1-9">    last_day <span class="op" style="color: #5E5E5E;
+<span id="cb2-3">    last_day <span class="op" style="color: #5E5E5E;
 background-color: null;
 font-style: inherit;">=</span> calendar.monthrange(first_date.year, first_date.month)[<span class="dv" style="color: #AD0000;
 background-color: null;
 font-style: inherit;">1</span>]</span>
-<span id="cb1-10">    last_date <span class="op" style="color: #5E5E5E;
+<span id="cb2-4">    last_date <span class="op" style="color: #5E5E5E;
 background-color: null;
 font-style: inherit;">=</span> first_date.replace(day<span class="op" style="color: #5E5E5E;
 background-color: null;
-font-style: inherit;">=</span>last_day)</span>
-<span id="cb1-11"></span>
-<span id="cb1-12">    start_api <span class="op" style="color: #5E5E5E;
+font-style: inherit;">=</span>last_day)</span></code></pre></div></div>
+<hr>
+</section>
+<section id="consulta-à-api-do-banco-central-ptax" class="level3">
+<h3 class="anchored" data-anchor-id="consulta-à-api-do-banco-central-ptax">Consulta à API do Banco Central (PTAX)</h3>
+<p>Com as datas definidas, formatamos a URL de acordo com a documentação da API Olinda do Banco Central. A requisição busca a cotação de venda do dólar para o intervalo estipulado.</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb3" style="background: #f1f3f5;"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb3-1">    start_api <span class="op" style="color: #5E5E5E;
 background-color: null;
 font-style: inherit;">=</span> first_date.strftime(<span class="st" style="color: #20794D;
 background-color: null;
@@ -615,7 +1014,7 @@ background-color: null;
 font-style: inherit;">%d</span><span class="st" style="color: #20794D;
 background-color: null;
 font-style: inherit;">-%Y'"</span>)</span>
-<span id="cb1-13">    end_api <span class="op" style="color: #5E5E5E;
+<span id="cb3-2">    end_api <span class="op" style="color: #5E5E5E;
 background-color: null;
 font-style: inherit;">=</span> last_date.strftime(<span class="st" style="color: #20794D;
 background-color: null;
@@ -624,8 +1023,8 @@ background-color: null;
 font-style: inherit;">%d</span><span class="st" style="color: #20794D;
 background-color: null;
 font-style: inherit;">-%Y'"</span>)</span>
-<span id="cb1-14"></span>
-<span id="cb1-15">    url <span class="op" style="color: #5E5E5E;
+<span id="cb3-3"></span>
+<span id="cb3-4">    url <span class="op" style="color: #5E5E5E;
 background-color: null;
 font-style: inherit;">=</span> <span class="ss" style="color: #20794D;
 background-color: null;
@@ -642,15 +1041,15 @@ background-color: null;
 font-style: inherit;">}</span><span class="ss" style="color: #20794D;
 background-color: null;
 font-style: inherit;">)?%24format=json"</span></span>
-<span id="cb1-16"></span>
-<span id="cb1-17">    res <span class="op" style="color: #5E5E5E;
+<span id="cb3-5"></span>
+<span id="cb3-6">    res <span class="op" style="color: #5E5E5E;
 background-color: null;
 font-style: inherit;">=</span> requests.get(url)</span>
-<span id="cb1-18">    dados_json <span class="op" style="color: #5E5E5E;
+<span id="cb3-7">    dados_json <span class="op" style="color: #5E5E5E;
 background-color: null;
 font-style: inherit;">=</span> res.json()</span>
-<span id="cb1-19"></span>
-<span id="cb1-20">    <span class="cf" style="color: #003B4F;
+<span id="cb3-8"></span>
+<span id="cb3-9">    <span class="cf" style="color: #003B4F;
 background-color: null;
 font-weight: bold;
 font-style: inherit;">if</span> <span class="st" style="color: #20794D;
@@ -673,63 +1072,291 @@ background-color: null;
 font-style: inherit;">==</span> <span class="dv" style="color: #AD0000;
 background-color: null;
 font-style: inherit;">0</span>:</span>
-<span id="cb1-21">        <span class="bu" style="color: null;
+<span id="cb3-10">        <span class="bu" style="color: null;
 background-color: null;
 font-style: inherit;">print</span>(<span class="st" style="color: #20794D;
 background-color: null;
 font-style: inherit;">"Nenhum dado encontrado."</span>)</span>
-<span id="cb1-22">        <span class="cf" style="color: #003B4F;
+<span id="cb3-11">        <span class="cf" style="color: #003B4F;
 background-color: null;
 font-weight: bold;
-font-style: inherit;">return</span></span>
-<span id="cb1-23"></span>
-<span id="cb1-24">    df <span class="op" style="color: #5E5E5E;
+font-style: inherit;">return</span></span></code></pre></div></div>
+<hr>
+</section>
+<section id="tratamento-de-dados-e-preenchimento-de-lacunas" class="level3">
+<h3 class="anchored" data-anchor-id="tratamento-de-dados-e-preenchimento-de-lacunas">Tratamento de Dados e Preenchimento de Lacunas</h3>
+<p>Esta é uma etapa crucial. A API não retorna dados de fins de semana ou feriados. Para manter o gráfico contínuo, criamos um índice com <strong>todos</strong> os dias do mês e utilizamos o método <code>ffill()</code> (<em>forward fill</em>). Isso garante que, em dias sem cotação (como domingo), seja repetido o valor do último dia útil (sexta-feira).</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb4" style="background: #f1f3f5;"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb4-1">    df <span class="op" style="color: #5E5E5E;
 background-color: null;
 font-style: inherit;">=</span> pd.DataFrame(dados_json[<span class="st" style="color: #20794D;
 background-color: null;
 font-style: inherit;">'value'</span>])</span>
-<span id="cb1-25">    df[<span class="st" style="color: #20794D;
+<span id="cb4-2">    df[<span class="st" style="color: #20794D;
 background-color: null;
 font-style: inherit;">'dataHoraCotacao'</span>] <span class="op" style="color: #5E5E5E;
 background-color: null;
 font-style: inherit;">=</span> pd.to_datetime(df[<span class="st" style="color: #20794D;
 background-color: null;
 font-style: inherit;">'dataHoraCotacao'</span>]).dt.normalize()</span>
-<span id="cb1-26">    df[<span class="st" style="color: #20794D;
+<span id="cb4-3">    df[<span class="st" style="color: #20794D;
 background-color: null;
 font-style: inherit;">'cotacaoVenda'</span>] <span class="op" style="color: #5E5E5E;
 background-color: null;
 font-style: inherit;">=</span> pd.to_numeric(df[<span class="st" style="color: #20794D;
 background-color: null;
 font-style: inherit;">'cotacaoVenda'</span>])</span>
-<span id="cb1-27">    df <span class="op" style="color: #5E5E5E;
+<span id="cb4-4">    df <span class="op" style="color: #5E5E5E;
 background-color: null;
 font-style: inherit;">=</span> df.set_index(<span class="st" style="color: #20794D;
 background-color: null;
 font-style: inherit;">'dataHoraCotacao'</span>)</span>
-<span id="cb1-28"></span>
-<span id="cb1-29">    idx_completo <span class="op" style="color: #5E5E5E;
+<span id="cb4-5"></span>
+<span id="cb4-6">    idx_completo <span class="op" style="color: #5E5E5E;
 background-color: null;
 font-style: inherit;">=</span> pd.date_range(start<span class="op" style="color: #5E5E5E;
 background-color: null;
 font-style: inherit;">=</span>first_date, end<span class="op" style="color: #5E5E5E;
 background-color: null;
 font-style: inherit;">=</span>last_date)</span>
-<span id="cb1-30">    df_completo <span class="op" style="color: #5E5E5E;
+<span id="cb4-7">    df_completo <span class="op" style="color: #5E5E5E;
 background-color: null;
 font-style: inherit;">=</span> df.reindex(idx_completo)</span>
-<span id="cb1-31">    df_completo[<span class="st" style="color: #20794D;
+<span id="cb4-8">    df_completo[<span class="st" style="color: #20794D;
 background-color: null;
 font-style: inherit;">'cotacaoVenda'</span>] <span class="op" style="color: #5E5E5E;
 background-color: null;
 font-style: inherit;">=</span> df_completo[<span class="st" style="color: #20794D;
 background-color: null;
 font-style: inherit;">'cotacaoVenda'</span>].ffill()</span>
-<span id="cb1-32"></span>
-<span id="cb1-33">    df_final <span class="op" style="color: #5E5E5E;
+<span id="cb4-9"></span>
+<span id="cb4-10">    df_final <span class="op" style="color: #5E5E5E;
 background-color: null;
 font-style: inherit;">=</span> df_completo.reset_index()</span>
-<span id="cb1-34">    df_final.rename(columns<span class="op" style="color: #5E5E5E;
+<span id="cb4-11">    df_final.rename(columns<span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span>{<span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">'index'</span>: <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">'Data'</span>, <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">'cotacaoVenda'</span>: <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">'Valor Dólar (R$)'</span>}, inplace<span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span><span class="va" style="color: #111111;
+background-color: null;
+font-style: inherit;">True</span>)</span></code></pre></div></div>
+<hr>
+</section>
+<section id="geração-do-gráfico" class="level3">
+<h3 class="anchored" data-anchor-id="geração-do-gráfico">Geração do Gráfico</h3>
+<p>Por fim, utilizamos a biblioteca <strong>Plotly</strong> para criar um gráfico de linha interativo. Adicionamos marcadores para facilitar a visualização dos pontos diários de cotação.</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb5" style="background: #f1f3f5;"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb5-1">    fig <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> px.line(</span>
+<span id="cb5-2">        df_final, </span>
+<span id="cb5-3">        x<span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span><span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">'Data'</span>, </span>
+<span id="cb5-4">        y<span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span><span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">'Valor Dólar (R$)'</span>, </span>
+<span id="cb5-5">        title<span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span><span class="ss" style="color: #20794D;
+background-color: null;
+font-style: inherit;">f'Cotação do Dólar - Período: </span><span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">{</span>data_str<span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">}</span><span class="ss" style="color: #20794D;
+background-color: null;
+font-style: inherit;">'</span>,</span>
+<span id="cb5-6">        markers<span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span><span class="va" style="color: #111111;
+background-color: null;
+font-style: inherit;">True</span></span>
+<span id="cb5-7">    )</span>
+<span id="cb5-8">    </span>
+<span id="cb5-9">    fig.show()</span></code></pre></div></div>
+<hr>
+</section>
+<section id="código-completo-e-resultado" class="level3">
+<h3 class="anchored" data-anchor-id="código-completo-e-resultado">Código Completo e Resultado</h3>
+<p>Abaixo, a execução completa da rotina para o mês de Novembro de 2024.</p>
+<div id="5b5a805f" class="cell" data-execution_count="1">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb6" style="background: #f1f3f5;"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb6-1"><span class="im" style="color: #00769E;
+background-color: null;
+font-style: inherit;">import</span> calendar</span>
+<span id="cb6-2"><span class="im" style="color: #00769E;
+background-color: null;
+font-style: inherit;">import</span> requests</span>
+<span id="cb6-3"><span class="im" style="color: #00769E;
+background-color: null;
+font-style: inherit;">import</span> pandas <span class="im" style="color: #00769E;
+background-color: null;
+font-style: inherit;">as</span> pd</span>
+<span id="cb6-4"><span class="im" style="color: #00769E;
+background-color: null;
+font-style: inherit;">import</span> plotly.express <span class="im" style="color: #00769E;
+background-color: null;
+font-style: inherit;">as</span> px</span>
+<span id="cb6-5"><span class="im" style="color: #00769E;
+background-color: null;
+font-style: inherit;">from</span> datetime <span class="im" style="color: #00769E;
+background-color: null;
+font-style: inherit;">import</span> datetime</span>
+<span id="cb6-6"></span>
+<span id="cb6-7"><span class="kw" style="color: #003B4F;
+background-color: null;
+font-weight: bold;
+font-style: inherit;">def</span> gerar_grafico_dolar(data_str):</span>
+<span id="cb6-8">    first_date <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> datetime.strptime(data_str, <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"%m%Y"</span>)</span>
+<span id="cb6-9">    last_day <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> calendar.monthrange(first_date.year, first_date.month)[<span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">1</span>]</span>
+<span id="cb6-10">    last_date <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> first_date.replace(day<span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span>last_day)</span>
+<span id="cb6-11"></span>
+<span id="cb6-12">    start_api <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> first_date.strftime(<span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"'%m-</span><span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">%d</span><span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">-%Y'"</span>)</span>
+<span id="cb6-13">    end_api <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> last_date.strftime(<span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"'%m-</span><span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">%d</span><span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">-%Y'"</span>)</span>
+<span id="cb6-14"></span>
+<span id="cb6-15">    url <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> <span class="ss" style="color: #20794D;
+background-color: null;
+font-style: inherit;">f"https://olinda.bcb.gov.br/olinda/servico/PTAX/versao/v1/odata/CotacaoDolarPeriodo(dataInicial=</span><span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">{</span>start_api<span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">}</span><span class="ss" style="color: #20794D;
+background-color: null;
+font-style: inherit;">,dataFinalCotacao=</span><span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">{</span>end_api<span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">}</span><span class="ss" style="color: #20794D;
+background-color: null;
+font-style: inherit;">)?%24format=json"</span></span>
+<span id="cb6-16"></span>
+<span id="cb6-17">    res <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> requests.get(url)</span>
+<span id="cb6-18">    dados_json <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> res.json()</span>
+<span id="cb6-19"></span>
+<span id="cb6-20">    <span class="cf" style="color: #003B4F;
+background-color: null;
+font-weight: bold;
+font-style: inherit;">if</span> <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">'value'</span> <span class="kw" style="color: #003B4F;
+background-color: null;
+font-weight: bold;
+font-style: inherit;">not</span> <span class="kw" style="color: #003B4F;
+background-color: null;
+font-weight: bold;
+font-style: inherit;">in</span> dados_json <span class="kw" style="color: #003B4F;
+background-color: null;
+font-weight: bold;
+font-style: inherit;">or</span> <span class="bu" style="color: null;
+background-color: null;
+font-style: inherit;">len</span>(dados_json[<span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">'value'</span>]) <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">==</span> <span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">0</span>:</span>
+<span id="cb6-21">        <span class="bu" style="color: null;
+background-color: null;
+font-style: inherit;">print</span>(<span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"Nenhum dado encontrado."</span>)</span>
+<span id="cb6-22">        <span class="cf" style="color: #003B4F;
+background-color: null;
+font-weight: bold;
+font-style: inherit;">return</span></span>
+<span id="cb6-23"></span>
+<span id="cb6-24">    df <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> pd.DataFrame(dados_json[<span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">'value'</span>])</span>
+<span id="cb6-25">    df[<span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">'dataHoraCotacao'</span>] <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> pd.to_datetime(df[<span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">'dataHoraCotacao'</span>]).dt.normalize()</span>
+<span id="cb6-26">    df[<span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">'cotacaoVenda'</span>] <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> pd.to_numeric(df[<span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">'cotacaoVenda'</span>])</span>
+<span id="cb6-27">    df <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> df.set_index(<span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">'dataHoraCotacao'</span>)</span>
+<span id="cb6-28"></span>
+<span id="cb6-29">    idx_completo <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> pd.date_range(start<span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span>first_date, end<span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span>last_date)</span>
+<span id="cb6-30">    df_completo <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> df.reindex(idx_completo)</span>
+<span id="cb6-31">    df_completo[<span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">'cotacaoVenda'</span>] <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> df_completo[<span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">'cotacaoVenda'</span>].ffill()</span>
+<span id="cb6-32"></span>
+<span id="cb6-33">    df_final <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> df_completo.reset_index()</span>
+<span id="cb6-34">    df_final.rename(columns<span class="op" style="color: #5E5E5E;
 background-color: null;
 font-style: inherit;">=</span>{<span class="st" style="color: #20794D;
 background-color: null;
@@ -744,22 +1371,22 @@ background-color: null;
 font-style: inherit;">=</span><span class="va" style="color: #111111;
 background-color: null;
 font-style: inherit;">True</span>)</span>
-<span id="cb1-35"></span>
-<span id="cb1-36">    fig <span class="op" style="color: #5E5E5E;
+<span id="cb6-35"></span>
+<span id="cb6-36">    fig <span class="op" style="color: #5E5E5E;
 background-color: null;
 font-style: inherit;">=</span> px.line(</span>
-<span id="cb1-37">        df_final, </span>
-<span id="cb1-38">        x<span class="op" style="color: #5E5E5E;
+<span id="cb6-37">        df_final, </span>
+<span id="cb6-38">        x<span class="op" style="color: #5E5E5E;
 background-color: null;
 font-style: inherit;">=</span><span class="st" style="color: #20794D;
 background-color: null;
 font-style: inherit;">'Data'</span>, </span>
-<span id="cb1-39">        y<span class="op" style="color: #5E5E5E;
+<span id="cb6-39">        y<span class="op" style="color: #5E5E5E;
 background-color: null;
 font-style: inherit;">=</span><span class="st" style="color: #20794D;
 background-color: null;
 font-style: inherit;">'Valor Dólar (R$)'</span>, </span>
-<span id="cb1-40">        title<span class="op" style="color: #5E5E5E;
+<span id="cb6-40">        title<span class="op" style="color: #5E5E5E;
 background-color: null;
 font-style: inherit;">=</span><span class="ss" style="color: #20794D;
 background-color: null;
@@ -770,23 +1397,23 @@ background-color: null;
 font-style: inherit;">}</span><span class="ss" style="color: #20794D;
 background-color: null;
 font-style: inherit;">'</span>,</span>
-<span id="cb1-41">        markers<span class="op" style="color: #5E5E5E;
+<span id="cb6-41">        markers<span class="op" style="color: #5E5E5E;
 background-color: null;
 font-style: inherit;">=</span><span class="va" style="color: #111111;
 background-color: null;
 font-style: inherit;">True</span></span>
-<span id="cb1-42">    )</span>
-<span id="cb1-43">    </span>
-<span id="cb1-44">    fig.show()</span>
-<span id="cb1-45"></span>
-<span id="cb1-46">gerar_grafico_dolar(<span class="st" style="color: #20794D;
+<span id="cb6-42">    )</span>
+<span id="cb6-43">    </span>
+<span id="cb6-44">    fig.show()</span>
+<span id="cb6-45"></span>
+<span id="cb6-46">gerar_grafico_dolar(<span class="st" style="color: #20794D;
 background-color: null;
 font-style: inherit;">"112024"</span>)</span></code></pre></div></div>
 <div class="cell-output cell-output-display">
 <div>            <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js?config=TeX-AMS-MML_SVG"></script><script type="text/javascript">if (window.MathJax && window.MathJax.Hub && window.MathJax.Hub.Config) {window.MathJax.Hub.Config({SVG: {font: "STIX-Web"}});}</script>                <script type="text/javascript">window.PlotlyConfig = {MathJaxConfig: 'local'};</script>
-        <script charset="utf-8" src="https://cdn.plot.ly/plotly-3.3.0.min.js" integrity="sha256-bO3dS6yCpk9aK4gUpNELtCiDeSYvGYnK7jFI58NQnHI=" crossorigin="anonymous"></script>                <div id="5ef2c3f6-a549-4311-aa42-faf2821e3d11" class="plotly-graph-div" style="height:525px; width:100%;"></div>            <script type="text/javascript">                window.PLOTLYENV=window.PLOTLYENV || {};                                if (document.getElementById("5ef2c3f6-a549-4311-aa42-faf2821e3d11")) {                    Plotly.newPlot(                        "5ef2c3f6-a549-4311-aa42-faf2821e3d11",                        [{"hovertemplate":"Data=%{x}\u003cbr\u003eValor D\u00f3lar (R$)=%{y}\u003cextra\u003e\u003c\u002fextra\u003e","legendgroup":"","line":{"color":"#636efa","dash":"solid"},"marker":{"symbol":"circle"},"mode":"lines+markers","name":"","orientation":"v","showlegend":false,"x":["2024-11-01T00:00:00.000000000","2024-11-02T00:00:00.000000000","2024-11-03T00:00:00.000000000","2024-11-04T00:00:00.000000000","2024-11-05T00:00:00.000000000","2024-11-06T00:00:00.000000000","2024-11-07T00:00:00.000000000","2024-11-08T00:00:00.000000000","2024-11-09T00:00:00.000000000","2024-11-10T00:00:00.000000000","2024-11-11T00:00:00.000000000","2024-11-12T00:00:00.000000000","2024-11-13T00:00:00.000000000","2024-11-14T00:00:00.000000000","2024-11-15T00:00:00.000000000","2024-11-16T00:00:00.000000000","2024-11-17T00:00:00.000000000","2024-11-18T00:00:00.000000000","2024-11-19T00:00:00.000000000","2024-11-20T00:00:00.000000000","2024-11-21T00:00:00.000000000","2024-11-22T00:00:00.000000000","2024-11-23T00:00:00.000000000","2024-11-24T00:00:00.000000000","2024-11-25T00:00:00.000000000","2024-11-26T00:00:00.000000000","2024-11-27T00:00:00.000000000","2024-11-28T00:00:00.000000000","2024-11-29T00:00:00.000000000","2024-11-30T00:00:00.000000000"],"xaxis":"x","y":{"dtype":"f8","bdata":"Qj7o2aw6F0BCPujZrDoXQEI+6NmsOhdA8IXJVMEoF0AzxLEubiMXQFfsL7snDxdASnuDL0ymFkBX7C+7Jw8XQFfsL7snDxdAV+wvuycPF0D+1HjpJjEXQGsr9pfdExdAhJ7Nqs8VF0CBlUOLbCcXQIGVQ4tsJxdAgZVDi2wnF0CBlUOLbCcXQF+YTBWMChdA1CtlGeIYF0DUK2UZ4hgXQE0VjErqRBdA5BQdyeU\u002fF0DkFB3J5T8XQOQUHcnlPxdAbAn5oGczF0AZBFYOLTIXQFR0JJf\u002fUBdAwoanV8ryF0AQWDm0yDYYQBBYObTINhhA"},"yaxis":"y","type":"scatter"}],                        {"template":{"data":{"histogram2dcontour":[{"type":"histogram2dcontour","colorbar":{"outlinewidth":0,"ticks":""},"colorscale":[[0.0,"#0d0887"],[0.1111111111111111,"#46039f"],[0.2222222222222222,"#7201a8"],[0.3333333333333333,"#9c179e"],[0.4444444444444444,"#bd3786"],[0.5555555555555556,"#d8576b"],[0.6666666666666666,"#ed7953"],[0.7777777777777778,"#fb9f3a"],[0.8888888888888888,"#fdca26"],[1.0,"#f0f921"]]}],"choropleth":[{"type":"choropleth","colorbar":{"outlinewidth":0,"ticks":""}}],"histogram2d":[{"type":"histogram2d","colorbar":{"outlinewidth":0,"ticks":""},"colorscale":[[0.0,"#0d0887"],[0.1111111111111111,"#46039f"],[0.2222222222222222,"#7201a8"],[0.3333333333333333,"#9c179e"],[0.4444444444444444,"#bd3786"],[0.5555555555555556,"#d8576b"],[0.6666666666666666,"#ed7953"],[0.7777777777777778,"#fb9f3a"],[0.8888888888888888,"#fdca26"],[1.0,"#f0f921"]]}],"heatmap":[{"type":"heatmap","colorbar":{"outlinewidth":0,"ticks":""},"colorscale":[[0.0,"#0d0887"],[0.1111111111111111,"#46039f"],[0.2222222222222222,"#7201a8"],[0.3333333333333333,"#9c179e"],[0.4444444444444444,"#bd3786"],[0.5555555555555556,"#d8576b"],[0.6666666666666666,"#ed7953"],[0.7777777777777778,"#fb9f3a"],[0.8888888888888888,"#fdca26"],[1.0,"#f0f921"]]}],"contourcarpet":[{"type":"contourcarpet","colorbar":{"outlinewidth":0,"ticks":""}}],"contour":[{"type":"contour","colorbar":{"outlinewidth":0,"ticks":""},"colorscale":[[0.0,"#0d0887"],[0.1111111111111111,"#46039f"],[0.2222222222222222,"#7201a8"],[0.3333333333333333,"#9c179e"],[0.4444444444444444,"#bd3786"],[0.5555555555555556,"#d8576b"],[0.6666666666666666,"#ed7953"],[0.7777777777777778,"#fb9f3a"],[0.8888888888888888,"#fdca26"],[1.0,"#f0f921"]]}],"surface":[{"type":"surface","colorbar":{"outlinewidth":0,"ticks":""},"colorscale":[[0.0,"#0d0887"],[0.1111111111111111,"#46039f"],[0.2222222222222222,"#7201a8"],[0.3333333333333333,"#9c179e"],[0.4444444444444444,"#bd3786"],[0.5555555555555556,"#d8576b"],[0.6666666666666666,"#ed7953"],[0.7777777777777778,"#fb9f3a"],[0.8888888888888888,"#fdca26"],[1.0,"#f0f921"]]}],"mesh3d":[{"type":"mesh3d","colorbar":{"outlinewidth":0,"ticks":""}}],"scatter":[{"fillpattern":{"fillmode":"overlay","size":10,"solidity":0.2},"type":"scatter"}],"parcoords":[{"type":"parcoords","line":{"colorbar":{"outlinewidth":0,"ticks":""}}}],"scatterpolargl":[{"type":"scatterpolargl","marker":{"colorbar":{"outlinewidth":0,"ticks":""}}}],"bar":[{"error_x":{"color":"#2a3f5f"},"error_y":{"color":"#2a3f5f"},"marker":{"line":{"color":"#E5ECF6","width":0.5},"pattern":{"fillmode":"overlay","size":10,"solidity":0.2}},"type":"bar"}],"scattergeo":[{"type":"scattergeo","marker":{"colorbar":{"outlinewidth":0,"ticks":""}}}],"scatterpolar":[{"type":"scatterpolar","marker":{"colorbar":{"outlinewidth":0,"ticks":""}}}],"histogram":[{"marker":{"pattern":{"fillmode":"overlay","size":10,"solidity":0.2}},"type":"histogram"}],"scattergl":[{"type":"scattergl","marker":{"colorbar":{"outlinewidth":0,"ticks":""}}}],"scatter3d":[{"type":"scatter3d","line":{"colorbar":{"outlinewidth":0,"ticks":""}},"marker":{"colorbar":{"outlinewidth":0,"ticks":""}}}],"scattermap":[{"type":"scattermap","marker":{"colorbar":{"outlinewidth":0,"ticks":""}}}],"scattermapbox":[{"type":"scattermapbox","marker":{"colorbar":{"outlinewidth":0,"ticks":""}}}],"scatterternary":[{"type":"scatterternary","marker":{"colorbar":{"outlinewidth":0,"ticks":""}}}],"scattercarpet":[{"type":"scattercarpet","marker":{"colorbar":{"outlinewidth":0,"ticks":""}}}],"carpet":[{"aaxis":{"endlinecolor":"#2a3f5f","gridcolor":"white","linecolor":"white","minorgridcolor":"white","startlinecolor":"#2a3f5f"},"baxis":{"endlinecolor":"#2a3f5f","gridcolor":"white","linecolor":"white","minorgridcolor":"white","startlinecolor":"#2a3f5f"},"type":"carpet"}],"table":[{"cells":{"fill":{"color":"#EBF0F8"},"line":{"color":"white"}},"header":{"fill":{"color":"#C8D4E3"},"line":{"color":"white"}},"type":"table"}],"barpolar":[{"marker":{"line":{"color":"#E5ECF6","width":0.5},"pattern":{"fillmode":"overlay","size":10,"solidity":0.2}},"type":"barpolar"}],"pie":[{"automargin":true,"type":"pie"}]},"layout":{"autotypenumbers":"strict","colorway":["#636efa","#EF553B","#00cc96","#ab63fa","#FFA15A","#19d3f3","#FF6692","#B6E880","#FF97FF","#FECB52"],"font":{"color":"#2a3f5f"},"hovermode":"closest","hoverlabel":{"align":"left"},"paper_bgcolor":"white","plot_bgcolor":"#E5ECF6","polar":{"bgcolor":"#E5ECF6","angularaxis":{"gridcolor":"white","linecolor":"white","ticks":""},"radialaxis":{"gridcolor":"white","linecolor":"white","ticks":""}},"ternary":{"bgcolor":"#E5ECF6","aaxis":{"gridcolor":"white","linecolor":"white","ticks":""},"baxis":{"gridcolor":"white","linecolor":"white","ticks":""},"caxis":{"gridcolor":"white","linecolor":"white","ticks":""}},"coloraxis":{"colorbar":{"outlinewidth":0,"ticks":""}},"colorscale":{"sequential":[[0.0,"#0d0887"],[0.1111111111111111,"#46039f"],[0.2222222222222222,"#7201a8"],[0.3333333333333333,"#9c179e"],[0.4444444444444444,"#bd3786"],[0.5555555555555556,"#d8576b"],[0.6666666666666666,"#ed7953"],[0.7777777777777778,"#fb9f3a"],[0.8888888888888888,"#fdca26"],[1.0,"#f0f921"]],"sequentialminus":[[0.0,"#0d0887"],[0.1111111111111111,"#46039f"],[0.2222222222222222,"#7201a8"],[0.3333333333333333,"#9c179e"],[0.4444444444444444,"#bd3786"],[0.5555555555555556,"#d8576b"],[0.6666666666666666,"#ed7953"],[0.7777777777777778,"#fb9f3a"],[0.8888888888888888,"#fdca26"],[1.0,"#f0f921"]],"diverging":[[0,"#8e0152"],[0.1,"#c51b7d"],[0.2,"#de77ae"],[0.3,"#f1b6da"],[0.4,"#fde0ef"],[0.5,"#f7f7f7"],[0.6,"#e6f5d0"],[0.7,"#b8e186"],[0.8,"#7fbc41"],[0.9,"#4d9221"],[1,"#276419"]]},"xaxis":{"gridcolor":"white","linecolor":"white","ticks":"","title":{"standoff":15},"zerolinecolor":"white","automargin":true,"zerolinewidth":2},"yaxis":{"gridcolor":"white","linecolor":"white","ticks":"","title":{"standoff":15},"zerolinecolor":"white","automargin":true,"zerolinewidth":2},"scene":{"xaxis":{"backgroundcolor":"#E5ECF6","gridcolor":"white","linecolor":"white","showbackground":true,"ticks":"","zerolinecolor":"white","gridwidth":2},"yaxis":{"backgroundcolor":"#E5ECF6","gridcolor":"white","linecolor":"white","showbackground":true,"ticks":"","zerolinecolor":"white","gridwidth":2},"zaxis":{"backgroundcolor":"#E5ECF6","gridcolor":"white","linecolor":"white","showbackground":true,"ticks":"","zerolinecolor":"white","gridwidth":2}},"shapedefaults":{"line":{"color":"#2a3f5f"}},"annotationdefaults":{"arrowcolor":"#2a3f5f","arrowhead":0,"arrowwidth":1},"geo":{"bgcolor":"white","landcolor":"#E5ECF6","subunitcolor":"white","showland":true,"showlakes":true,"lakecolor":"white"},"title":{"x":0.05},"mapbox":{"style":"light"},"margin":{"b":0,"l":0,"r":0,"t":30}}},"xaxis":{"anchor":"y","domain":[0.0,1.0],"title":{"text":"Data"}},"yaxis":{"anchor":"x","domain":[0.0,1.0],"title":{"text":"Valor D\u00f3lar (R$)"}},"legend":{"tracegroupgap":0},"title":{"text":"Cota\u00e7\u00e3o do D\u00f3lar - Per\u00edodo: 112024"}},                        {"responsive": true}                    ).then(function(){
+        <script charset="utf-8" src="https://cdn.plot.ly/plotly-3.3.0.min.js" integrity="sha256-bO3dS6yCpk9aK4gUpNELtCiDeSYvGYnK7jFI58NQnHI=" crossorigin="anonymous"></script>                <div id="10860c35-b4c4-4160-bd88-b5f12c408860" class="plotly-graph-div" style="height:525px; width:100%;"></div>            <script type="text/javascript">                window.PLOTLYENV=window.PLOTLYENV || {};                                if (document.getElementById("10860c35-b4c4-4160-bd88-b5f12c408860")) {                    Plotly.newPlot(                        "10860c35-b4c4-4160-bd88-b5f12c408860",                        [{"hovertemplate":"Data=%{x}\u003cbr\u003eValor D\u00f3lar (R$)=%{y}\u003cextra\u003e\u003c\u002fextra\u003e","legendgroup":"","line":{"color":"#636efa","dash":"solid"},"marker":{"symbol":"circle"},"mode":"lines+markers","name":"","orientation":"v","showlegend":false,"x":["2024-11-01T00:00:00.000000000","2024-11-02T00:00:00.000000000","2024-11-03T00:00:00.000000000","2024-11-04T00:00:00.000000000","2024-11-05T00:00:00.000000000","2024-11-06T00:00:00.000000000","2024-11-07T00:00:00.000000000","2024-11-08T00:00:00.000000000","2024-11-09T00:00:00.000000000","2024-11-10T00:00:00.000000000","2024-11-11T00:00:00.000000000","2024-11-12T00:00:00.000000000","2024-11-13T00:00:00.000000000","2024-11-14T00:00:00.000000000","2024-11-15T00:00:00.000000000","2024-11-16T00:00:00.000000000","2024-11-17T00:00:00.000000000","2024-11-18T00:00:00.000000000","2024-11-19T00:00:00.000000000","2024-11-20T00:00:00.000000000","2024-11-21T00:00:00.000000000","2024-11-22T00:00:00.000000000","2024-11-23T00:00:00.000000000","2024-11-24T00:00:00.000000000","2024-11-25T00:00:00.000000000","2024-11-26T00:00:00.000000000","2024-11-27T00:00:00.000000000","2024-11-28T00:00:00.000000000","2024-11-29T00:00:00.000000000","2024-11-30T00:00:00.000000000"],"xaxis":"x","y":{"dtype":"f8","bdata":"Qj7o2aw6F0BCPujZrDoXQEI+6NmsOhdA8IXJVMEoF0AzxLEubiMXQFfsL7snDxdASnuDL0ymFkBX7C+7Jw8XQFfsL7snDxdAV+wvuycPF0D+1HjpJjEXQGsr9pfdExdAhJ7Nqs8VF0CBlUOLbCcXQIGVQ4tsJxdAgZVDi2wnF0CBlUOLbCcXQF+YTBWMChdA1CtlGeIYF0DUK2UZ4hgXQE0VjErqRBdA5BQdyeU\u002fF0DkFB3J5T8XQOQUHcnlPxdAbAn5oGczF0AZBFYOLTIXQFR0JJf\u002fUBdAwoanV8ryF0AQWDm0yDYYQBBYObTINhhA"},"yaxis":"y","type":"scatter"}],                        {"template":{"data":{"histogram2dcontour":[{"type":"histogram2dcontour","colorbar":{"outlinewidth":0,"ticks":""},"colorscale":[[0.0,"#0d0887"],[0.1111111111111111,"#46039f"],[0.2222222222222222,"#7201a8"],[0.3333333333333333,"#9c179e"],[0.4444444444444444,"#bd3786"],[0.5555555555555556,"#d8576b"],[0.6666666666666666,"#ed7953"],[0.7777777777777778,"#fb9f3a"],[0.8888888888888888,"#fdca26"],[1.0,"#f0f921"]]}],"choropleth":[{"type":"choropleth","colorbar":{"outlinewidth":0,"ticks":""}}],"histogram2d":[{"type":"histogram2d","colorbar":{"outlinewidth":0,"ticks":""},"colorscale":[[0.0,"#0d0887"],[0.1111111111111111,"#46039f"],[0.2222222222222222,"#7201a8"],[0.3333333333333333,"#9c179e"],[0.4444444444444444,"#bd3786"],[0.5555555555555556,"#d8576b"],[0.6666666666666666,"#ed7953"],[0.7777777777777778,"#fb9f3a"],[0.8888888888888888,"#fdca26"],[1.0,"#f0f921"]]}],"heatmap":[{"type":"heatmap","colorbar":{"outlinewidth":0,"ticks":""},"colorscale":[[0.0,"#0d0887"],[0.1111111111111111,"#46039f"],[0.2222222222222222,"#7201a8"],[0.3333333333333333,"#9c179e"],[0.4444444444444444,"#bd3786"],[0.5555555555555556,"#d8576b"],[0.6666666666666666,"#ed7953"],[0.7777777777777778,"#fb9f3a"],[0.8888888888888888,"#fdca26"],[1.0,"#f0f921"]]}],"contourcarpet":[{"type":"contourcarpet","colorbar":{"outlinewidth":0,"ticks":""}}],"contour":[{"type":"contour","colorbar":{"outlinewidth":0,"ticks":""},"colorscale":[[0.0,"#0d0887"],[0.1111111111111111,"#46039f"],[0.2222222222222222,"#7201a8"],[0.3333333333333333,"#9c179e"],[0.4444444444444444,"#bd3786"],[0.5555555555555556,"#d8576b"],[0.6666666666666666,"#ed7953"],[0.7777777777777778,"#fb9f3a"],[0.8888888888888888,"#fdca26"],[1.0,"#f0f921"]]}],"surface":[{"type":"surface","colorbar":{"outlinewidth":0,"ticks":""},"colorscale":[[0.0,"#0d0887"],[0.1111111111111111,"#46039f"],[0.2222222222222222,"#7201a8"],[0.3333333333333333,"#9c179e"],[0.4444444444444444,"#bd3786"],[0.5555555555555556,"#d8576b"],[0.6666666666666666,"#ed7953"],[0.7777777777777778,"#fb9f3a"],[0.8888888888888888,"#fdca26"],[1.0,"#f0f921"]]}],"mesh3d":[{"type":"mesh3d","colorbar":{"outlinewidth":0,"ticks":""}}],"scatter":[{"fillpattern":{"fillmode":"overlay","size":10,"solidity":0.2},"type":"scatter"}],"parcoords":[{"type":"parcoords","line":{"colorbar":{"outlinewidth":0,"ticks":""}}}],"scatterpolargl":[{"type":"scatterpolargl","marker":{"colorbar":{"outlinewidth":0,"ticks":""}}}],"bar":[{"error_x":{"color":"#2a3f5f"},"error_y":{"color":"#2a3f5f"},"marker":{"line":{"color":"#E5ECF6","width":0.5},"pattern":{"fillmode":"overlay","size":10,"solidity":0.2}},"type":"bar"}],"scattergeo":[{"type":"scattergeo","marker":{"colorbar":{"outlinewidth":0,"ticks":""}}}],"scatterpolar":[{"type":"scatterpolar","marker":{"colorbar":{"outlinewidth":0,"ticks":""}}}],"histogram":[{"marker":{"pattern":{"fillmode":"overlay","size":10,"solidity":0.2}},"type":"histogram"}],"scattergl":[{"type":"scattergl","marker":{"colorbar":{"outlinewidth":0,"ticks":""}}}],"scatter3d":[{"type":"scatter3d","line":{"colorbar":{"outlinewidth":0,"ticks":""}},"marker":{"colorbar":{"outlinewidth":0,"ticks":""}}}],"scattermap":[{"type":"scattermap","marker":{"colorbar":{"outlinewidth":0,"ticks":""}}}],"scattermapbox":[{"type":"scattermapbox","marker":{"colorbar":{"outlinewidth":0,"ticks":""}}}],"scatterternary":[{"type":"scatterternary","marker":{"colorbar":{"outlinewidth":0,"ticks":""}}}],"scattercarpet":[{"type":"scattercarpet","marker":{"colorbar":{"outlinewidth":0,"ticks":""}}}],"carpet":[{"aaxis":{"endlinecolor":"#2a3f5f","gridcolor":"white","linecolor":"white","minorgridcolor":"white","startlinecolor":"#2a3f5f"},"baxis":{"endlinecolor":"#2a3f5f","gridcolor":"white","linecolor":"white","minorgridcolor":"white","startlinecolor":"#2a3f5f"},"type":"carpet"}],"table":[{"cells":{"fill":{"color":"#EBF0F8"},"line":{"color":"white"}},"header":{"fill":{"color":"#C8D4E3"},"line":{"color":"white"}},"type":"table"}],"barpolar":[{"marker":{"line":{"color":"#E5ECF6","width":0.5},"pattern":{"fillmode":"overlay","size":10,"solidity":0.2}},"type":"barpolar"}],"pie":[{"automargin":true,"type":"pie"}]},"layout":{"autotypenumbers":"strict","colorway":["#636efa","#EF553B","#00cc96","#ab63fa","#FFA15A","#19d3f3","#FF6692","#B6E880","#FF97FF","#FECB52"],"font":{"color":"#2a3f5f"},"hovermode":"closest","hoverlabel":{"align":"left"},"paper_bgcolor":"white","plot_bgcolor":"#E5ECF6","polar":{"bgcolor":"#E5ECF6","angularaxis":{"gridcolor":"white","linecolor":"white","ticks":""},"radialaxis":{"gridcolor":"white","linecolor":"white","ticks":""}},"ternary":{"bgcolor":"#E5ECF6","aaxis":{"gridcolor":"white","linecolor":"white","ticks":""},"baxis":{"gridcolor":"white","linecolor":"white","ticks":""},"caxis":{"gridcolor":"white","linecolor":"white","ticks":""}},"coloraxis":{"colorbar":{"outlinewidth":0,"ticks":""}},"colorscale":{"sequential":[[0.0,"#0d0887"],[0.1111111111111111,"#46039f"],[0.2222222222222222,"#7201a8"],[0.3333333333333333,"#9c179e"],[0.4444444444444444,"#bd3786"],[0.5555555555555556,"#d8576b"],[0.6666666666666666,"#ed7953"],[0.7777777777777778,"#fb9f3a"],[0.8888888888888888,"#fdca26"],[1.0,"#f0f921"]],"sequentialminus":[[0.0,"#0d0887"],[0.1111111111111111,"#46039f"],[0.2222222222222222,"#7201a8"],[0.3333333333333333,"#9c179e"],[0.4444444444444444,"#bd3786"],[0.5555555555555556,"#d8576b"],[0.6666666666666666,"#ed7953"],[0.7777777777777778,"#fb9f3a"],[0.8888888888888888,"#fdca26"],[1.0,"#f0f921"]],"diverging":[[0,"#8e0152"],[0.1,"#c51b7d"],[0.2,"#de77ae"],[0.3,"#f1b6da"],[0.4,"#fde0ef"],[0.5,"#f7f7f7"],[0.6,"#e6f5d0"],[0.7,"#b8e186"],[0.8,"#7fbc41"],[0.9,"#4d9221"],[1,"#276419"]]},"xaxis":{"gridcolor":"white","linecolor":"white","ticks":"","title":{"standoff":15},"zerolinecolor":"white","automargin":true,"zerolinewidth":2},"yaxis":{"gridcolor":"white","linecolor":"white","ticks":"","title":{"standoff":15},"zerolinecolor":"white","automargin":true,"zerolinewidth":2},"scene":{"xaxis":{"backgroundcolor":"#E5ECF6","gridcolor":"white","linecolor":"white","showbackground":true,"ticks":"","zerolinecolor":"white","gridwidth":2},"yaxis":{"backgroundcolor":"#E5ECF6","gridcolor":"white","linecolor":"white","showbackground":true,"ticks":"","zerolinecolor":"white","gridwidth":2},"zaxis":{"backgroundcolor":"#E5ECF6","gridcolor":"white","linecolor":"white","showbackground":true,"ticks":"","zerolinecolor":"white","gridwidth":2}},"shapedefaults":{"line":{"color":"#2a3f5f"}},"annotationdefaults":{"arrowcolor":"#2a3f5f","arrowhead":0,"arrowwidth":1},"geo":{"bgcolor":"white","landcolor":"#E5ECF6","subunitcolor":"white","showland":true,"showlakes":true,"lakecolor":"white"},"title":{"x":0.05},"mapbox":{"style":"light"},"margin":{"b":0,"l":0,"r":0,"t":30}}},"xaxis":{"anchor":"y","domain":[0.0,1.0],"title":{"text":"Data"}},"yaxis":{"anchor":"x","domain":[0.0,1.0],"title":{"text":"Valor D\u00f3lar (R$)"}},"legend":{"tracegroupgap":0},"title":{"text":"Cota\u00e7\u00e3o do D\u00f3lar - Per\u00edodo: 112024"}},                        {"responsive": true}                    ).then(function(){
                             
-var gd = document.getElementById('5ef2c3f6-a549-4311-aa42-faf2821e3d11');
+var gd = document.getElementById('10860c35-b4c4-4160-bd88-b5f12c408860');
 var x = new MutationObserver(function (mutations, observer) {{
         var display = window.getComputedStyle(gd).display;
         if (!display || display === 'none') {{
@@ -813,62 +1440,17 @@ if (outputEl) {{
 </div>
 
 
+</section>
 
  ]]></description>
-  <category>news</category>
-  <category>code</category>
-  <category>analysis</category>
-  <category>dollar</category>
+  <category>python</category>
+  <category>data-science</category>
+  <category>api</category>
+  <category>finance</category>
+  <category>plotly</category>
   <guid>https://your-website-url.example.com/posts/cotacao-do-dolar/</guid>
   <pubDate>Wed, 19 Nov 2025 00:00:00 GMT</pubDate>
   <media:content url="https://your-website-url.example.com/posts/cotacao-do-dolar/image_dolar.jpg" medium="image" type="image/jpeg"/>
-</item>
-<item>
-  <title>Regressão Linear</title>
-  <dc:creator>Samuel Andrey</dc:creator>
-  <link>https://your-website-url.example.com/posts/regressao-linear/</link>
-  <description><![CDATA[ 
-
-
-
-
-
-
-<p>This is the first post in a Quarto blog. Welcome!</p>
-<pre><code>{python}
-
-import numpy as np
-import pandas as pd
-from plotnine import ggplot, aes, geom_point, geom_abline, ggsave
-
-valores_x = np.loadtxt('X.txt')
-valores_y = np.loadtxt('y.txt')
-
-X_b = np.c_[np.ones((len(valores_x), 1)), valores_x]
-theta_best = np.linalg.inv(X_b.T.dot(X_b)).dot(X_b.T).dot(valores_y)
-
-a = theta_best[0]
-b = theta_best[1]
-
-df = {"x": valores_x, "y": valores_y}
-
-plot = (
-  ggplot(pd.DataFrame(df), aes("x", "y"))
-  + geom_point()
-  + geom_abline(intercept=a, slope=b, color="red")
-)
-
-plot.save("grafico.png")
-print(grafico.png)
-</code></pre>
-
-
-
- ]]></description>
-  <category>news</category>
-  <guid>https://your-website-url.example.com/posts/regressao-linear/</guid>
-  <pubDate>Sun, 16 Nov 2025 00:00:00 GMT</pubDate>
-  <media:content url="https://your-website-url.example.com/posts/regressao-linear/image.jpg" medium="image" type="image/jpeg"/>
 </item>
 </channel>
 </rss>

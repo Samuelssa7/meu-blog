@@ -2,9 +2,9 @@
   {
     "listing": "/index.html",
     "items": [
+      "/posts/regressao-linear/index.html",
       "/posts/monitoramento-da-frota-de-onibus/index.html",
-      "/posts/cotacao-do-dolar/index.html",
-      "/posts/regressao-linear/index.html"
+      "/posts/cotacao-do-dolar/index.html"
     ]
   }
 ]

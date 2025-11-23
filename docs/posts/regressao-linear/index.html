@@ -7,9 +7,9 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 <meta name="author" content="Samuel Andrey">
-<meta name="dcterms.date" content="2025-11-16">
+<meta name="dcterms.date" content="2025-11-21">
 
-<title>Regressão Linear – codes</title>
+<title>Regressão Linear: Relação entre Salário e Estudo – CodesBlog</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -21,6 +21,41 @@ ul.task-list li input[type="checkbox"] {
   width: 0.8em;
   margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
   vertical-align: middle;
+}
+/* CSS for syntax highlighting */
+html { -webkit-text-size-adjust: 100%; }
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
 }
 </style>
 
@@ -249,7 +284,7 @@ ul.task-list li input[type="checkbox"] {
       <div class="navbar-container container-fluid">
       <div class="navbar-brand-container mx-auto">
     <a class="navbar-brand" href="../../index.html">
-    <span class="navbar-title">codes</span>
+    <span class="navbar-title">CodesBlog</span>
     </a>
   </div>
             <div id="quarto-search" class="" title="Search"></div>
@@ -263,12 +298,12 @@ ul.task-list li input[type="checkbox"] {
 <span class="menu-text">About</span></a>
   </li>  
   <li class="nav-item compact">
-    <a class="nav-link" href="https://github.com/"> <i class="bi bi-github" role="img">
+    <a class="nav-link" href="https://github.com/Samuelssa7"> <i class="bi bi-github" role="img">
 </i> 
 <span class="menu-text"></span></a>
   </li>  
   <li class="nav-item compact">
-    <a class="nav-link" href="https://twitter.com"> <i class="bi bi-twitter" role="img">
+    <a class="nav-link" href="https://www.linkedin.com/in/andrey-samuel-dev"> <i class="bi bi-linkedin" role="img">
 </i> 
 <span class="menu-text"></span></a>
   </li>  
@@ -284,9 +319,13 @@ ul.task-list li input[type="checkbox"] {
 <header id="title-block-header" class="quarto-title-block default page-columns page-full">
   <div class="quarto-title-banner page-columns page-full">
     <div class="quarto-title column-body">
-      <h1 class="title">Regressão Linear</h1>
+      <h1 class="title">Regressão Linear: Relação entre Salário e Estudo</h1>
                                 <div class="quarto-categories">
-                <div class="quarto-category">news</div>
+                <div class="quarto-category">python</div>
+                <div class="quarto-category">data-science</div>
+                <div class="quarto-category">statistics</div>
+                <div class="quarto-category">plotnine</div>
+                <div class="quarto-category">numpy</div>
               </div>
                   </div>
   </div>
@@ -304,7 +343,7 @@ ul.task-list li input[type="checkbox"] {
       <div>
       <div class="quarto-title-meta-heading">Published</div>
       <div class="quarto-title-meta-contents">
-        <p class="date">November 16, 2025</p>
+        <p class="date">November 21, 2025</p>
       </div>
     </div>
     
@@ -324,35 +363,85 @@ ul.task-list li input[type="checkbox"] {
 
 
 
-<p>This is the first post in a Quarto blog. Welcome!</p>
-<pre><code>{python}
+<p>Veja um gáfico linear analisando anos de estudo e faixa salarial. 📈</p>
+<hr>
+<section id="carregamento-das-bibliotecas-e-dados" class="level3">
+<h3 class="anchored" data-anchor-id="carregamento-das-bibliotecas-e-dados">1. Carregamento das Bibliotecas e Dados</h3>
+<p>Nesta etapa, importamos as bibliotecas necessárias para manipulação de arrays (<code>numpy</code>), dados (<code>pandas</code>) e gráficos (<code>plotnine</code>). Também carregamos os dados de entrada (<code>X.txt</code>) e saída (<code>y.txt</code>).</p>
+<div id="dfd4ae00" class="cell" data-execution_count="1">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb1"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> numpy <span class="im">as</span> np</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> pandas <span class="im">as</span> pd</span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> plotnine <span class="im">import</span> ggplot, aes, geom_point, geom_abline, ggsave</span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a>valores_x <span class="op">=</span> np.loadtxt(<span class="st">'X.txt'</span>)</span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a>valores_y <span class="op">=</span> np.loadtxt(<span class="st">'y.txt'</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<hr>
+</section>
+<section id="cálculo-dos-coeficientes" class="level3">
+<h3 class="anchored" data-anchor-id="cálculo-dos-coeficientes">2. Cálculo dos Coeficientes</h3>
+<p>Aqui preparamos a matriz adicionando uma coluna de “1s” (<code>para o intercepto</code>) e aplicamos a fórmula da Equação Normal para encontrar os melhores valores para theta. Ao final, separamos o intercepto (<code>a</code>) e a inclinação (<code>b</code>).</p>
+<div id="ba106a49" class="cell" data-execution_count="2">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb2"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>X_b <span class="op">=</span> np.c_[np.ones((<span class="bu">len</span>(valores_x), <span class="dv">1</span>)), valores_x]</span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>theta_best <span class="op">=</span> np.linalg.inv(X_b.T.dot(X_b)).dot(X_b.T).dot(valores_y)</span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a>a <span class="op">=</span> theta_best[<span class="dv">0</span>]</span>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a>b <span class="op">=</span> theta_best[<span class="dv">1</span>]</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<hr>
+</section>
+<section id="geração-e-salvamento-do-gráfico" class="level3">
+<h3 class="anchored" data-anchor-id="geração-e-salvamento-do-gráfico">3. Geração e Salvamento do Gráfico</h3>
+<p>Com os coeficientes calculados, criamos o gráfico contendo os pontos originais e a reta de regressão (<code>em vermelho</code>). O comando final salva o resultado como uma imagem.</p>
+<div id="cf5f2cbe" class="cell" data-execution_count="3">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb3"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>df <span class="op">=</span> {<span class="st">"x"</span>: valores_x, <span class="st">"y"</span>: valores_y}</span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>plot <span class="op">=</span> (</span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a>  ggplot(pd.DataFrame(df), aes(<span class="st">"x"</span>, <span class="st">"y"</span>))</span>
+<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a>  <span class="op">+</span> geom_point()</span>
+<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a>  <span class="op">+</span> geom_abline(intercept<span class="op">=</span>a, slope<span class="op">=</span>b, color<span class="op">=</span><span class="st">"red"</span>)</span>
+<span id="cb3-7"><a href="#cb3-7" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb3-8"><a href="#cb3-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-9"><a href="#cb3-9" aria-hidden="true" tabindex="-1"></a>plot.save(<span class="st">"grafico.png"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<hr>
+</section>
+<section id="código-completo-e-resultado" class="level3">
+<h3 class="anchored" data-anchor-id="código-completo-e-resultado">Código Completo e Resultado</h3>
+<p>Abaixo, o código completo para execução e a imagem gerada:</p>
+<div id="6984b8f5" class="cell" data-execution_count="4">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb4"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> numpy <span class="im">as</span> np</span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> pandas <span class="im">as</span> pd</span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> plotnine <span class="im">import</span> ggplot, aes, geom_point, geom_abline, ggsave</span>
+<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a>valores_x <span class="op">=</span> np.loadtxt(<span class="st">'X.txt'</span>)</span>
+<span id="cb4-6"><a href="#cb4-6" aria-hidden="true" tabindex="-1"></a>valores_y <span class="op">=</span> np.loadtxt(<span class="st">'y.txt'</span>)</span>
+<span id="cb4-7"><a href="#cb4-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-8"><a href="#cb4-8" aria-hidden="true" tabindex="-1"></a>X_b <span class="op">=</span> np.c_[np.ones((<span class="bu">len</span>(valores_x), <span class="dv">1</span>)), valores_x]</span>
+<span id="cb4-9"><a href="#cb4-9" aria-hidden="true" tabindex="-1"></a>theta_best <span class="op">=</span> np.linalg.inv(X_b.T.dot(X_b)).dot(X_b.T).dot(valores_y)</span>
+<span id="cb4-10"><a href="#cb4-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-11"><a href="#cb4-11" aria-hidden="true" tabindex="-1"></a>a <span class="op">=</span> theta_best[<span class="dv">0</span>]</span>
+<span id="cb4-12"><a href="#cb4-12" aria-hidden="true" tabindex="-1"></a>b <span class="op">=</span> theta_best[<span class="dv">1</span>]</span>
+<span id="cb4-13"><a href="#cb4-13" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-14"><a href="#cb4-14" aria-hidden="true" tabindex="-1"></a>df <span class="op">=</span> {<span class="st">"x"</span>: valores_x, <span class="st">"y"</span>: valores_y}</span>
+<span id="cb4-15"><a href="#cb4-15" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-16"><a href="#cb4-16" aria-hidden="true" tabindex="-1"></a>plot <span class="op">=</span> (</span>
+<span id="cb4-17"><a href="#cb4-17" aria-hidden="true" tabindex="-1"></a>  ggplot(pd.DataFrame(df), aes(<span class="st">"x"</span>, <span class="st">"y"</span>))</span>
+<span id="cb4-18"><a href="#cb4-18" aria-hidden="true" tabindex="-1"></a>  <span class="op">+</span> geom_point()</span>
+<span id="cb4-19"><a href="#cb4-19" aria-hidden="true" tabindex="-1"></a>  <span class="op">+</span> geom_abline(intercept<span class="op">=</span>a, slope<span class="op">=</span>b, color<span class="op">=</span><span class="st">"red"</span>)</span>
+<span id="cb4-20"><a href="#cb4-20" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb4-21"><a href="#cb4-21" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-22"><a href="#cb4-22" aria-hidden="true" tabindex="-1"></a>plot.save(<span class="st">"grafico.png"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="grafico.png" class="img-fluid figure-img" style="width:100.0%"></p>
+<figcaption>Gráfico de Regressão Linear</figcaption>
+</figure>
+</div>
 
-import numpy as np
-import pandas as pd
-from plotnine import ggplot, aes, geom_point, geom_abline, ggsave
 
-valores_x = np.loadtxt('X.txt')
-valores_y = np.loadtxt('y.txt')
-
-X_b = np.c_[np.ones((len(valores_x), 1)), valores_x]
-theta_best = np.linalg.inv(X_b.T.dot(X_b)).dot(X_b.T).dot(valores_y)
-
-a = theta_best[0]
-b = theta_best[1]
-
-df = {"x": valores_x, "y": valores_y}
-
-plot = (
-  ggplot(pd.DataFrame(df), aes("x", "y"))
-  + geom_point()
-  + geom_abline(intercept=a, slope=b, color="red")
-)
-
-plot.save("grafico.png")
-print(grafico.png)
-</code></pre>
-
-
+</section>
 
 </main> <!-- /main -->
 <script id="quarto-html-after-body" type="application/javascript">

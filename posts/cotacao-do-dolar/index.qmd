@@ -1,16 +1,105 @@
 ---
-title: "Cotação do Dólar"
-autor: "Samuel Andrey"
+title: "Análise do Dólar com Python e API do Banco Central"
+author: "Samuel Andrey"
 date: "2025-11-19"
-categories: [news, code, analysis, dollar]
+categories: [python, data-science, api, finance, plotly]
 image: "image_dolar.jpg"
 ---
 
 Veja a variação do preço do dólar no período de 11/2024 💵💹
 
+---
+
+### Importação das Bibliotecas
+
+Para iniciar nossa análise, precisamos importar as ferramentas necessárias. Utilizaremos o `calendar` e `datetime` para manipulação de datas, `requests` para acessar a API do Banco Central, `pandas` para tratar os dados em formato tabular e `plotly.express` para a visualização gráfica.
+
+```python
+import calendar
+import requests
+import pandas as pd
+import plotly.express as px
+from datetime import datetime
+```
+
+---
+
+### Definição do Período de Análise
+
+Aqui definimos a função principal que recebe a string com mês e ano (ex: "112024"). O código calcula automaticamente o primeiro e o último dia do mês selecionado para preparar a consulta à API.
+
+```python
+def gerar_grafico_dolar(data_str):
+    first_date = datetime.strptime(data_str, "%m%Y")
+    last_day = calendar.monthrange(first_date.year, first_date.month)[1]
+    last_date = first_date.replace(day=last_day)
+```
+
+---
+
+### Consulta à API do Banco Central (PTAX)
+
+Com as datas definidas, formatamos a URL de acordo com a documentação da API Olinda do Banco Central. A requisição busca a cotação de venda do dólar para o intervalo estipulado.
+
+```python
+    start_api = first_date.strftime("'%m-%d-%Y'")
+    end_api = last_date.strftime("'%m-%d-%Y'")
+
+    url = f"https://olinda.bcb.gov.br/olinda/servico/PTAX/versao/v1/odata/CotacaoDolarPeriodo(dataInicial={start_api},dataFinalCotacao={end_api})?%24format=json"
+
+    res = requests.get(url)
+    dados_json = res.json()
+
+    if 'value' not in dados_json or len(dados_json['value']) == 0:
+        print("Nenhum dado encontrado.")
+        return
+```
+
+---
+
+### Tratamento de Dados e Preenchimento de Lacunas
+
+Esta é uma etapa crucial. A API não retorna dados de fins de semana ou feriados. Para manter o gráfico contínuo, criamos um índice com **todos** os dias do mês e utilizamos o método `ffill()` (*forward fill*). Isso garante que, em dias sem cotação (como domingo), seja repetido o valor do último dia útil (sexta-feira).
+
+```python
+    df = pd.DataFrame(dados_json['value'])
+    df['dataHoraCotacao'] = pd.to_datetime(df['dataHoraCotacao']).dt.normalize()
+    df['cotacaoVenda'] = pd.to_numeric(df['cotacaoVenda'])
+    df = df.set_index('dataHoraCotacao')
+
+    idx_completo = pd.date_range(start=first_date, end=last_date)
+    df_completo = df.reindex(idx_completo)
+    df_completo['cotacaoVenda'] = df_completo['cotacaoVenda'].ffill()
+
+    df_final = df_completo.reset_index()
+    df_final.rename(columns={'index': 'Data', 'cotacaoVenda': 'Valor Dólar (R$)'}, inplace=True)
+```
+
+---
+
+### Geração do Gráfico
+
+Por fim, utilizamos a biblioteca **Plotly** para criar um gráfico de linha interativo. Adicionamos marcadores para facilitar a visualização dos pontos diários de cotação.
+
+```python
+    fig = px.line(
+        df_final, 
+        x='Data', 
+        y='Valor Dólar (R$)', 
+        title=f'Cotação do Dólar - Período: {data_str}',
+        markers=True
+    )
+    
+    fig.show()
+```
+
+---
+
+### Código Completo e Resultado
+
+Abaixo, a execução completa da rotina para o mês de Novembro de 2024.
+
 ```{python}
-
-
 import calendar
 import requests
 import pandas as pd
@@ -57,5 +146,4 @@ def gerar_grafico_dolar(data_str):
     fig.show()
 
 gerar_grafico_dolar("112024")
-
 ```

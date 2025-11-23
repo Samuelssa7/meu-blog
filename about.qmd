@@ -1,19 +1,30 @@
 ---
 title: "About"
-image: profile.jpg
+image: perfil.png
 about:
   template: jolla
   links:
-    - icon: twitter
-      text: Twitter
-      href: https://twitter.com
     - icon: linkedin
       text: LinkedIn
-      href: https://linkedin.com
+      href: https://www.linkedin.com/in/andrey-samuel-dev
     - icon: github
       text: Github
-      href: https://github.com
-
+      href: https://github.com/Samuelssa7
+    - icon: envelope
+      text: Email
+      href: samuelandrey193@gmail.com
 ---
 
-About this blog
+Olá! Meu nome é **Samuel Andrey**.
+
+Este blog foi desenvolvido como parte das atividades acadêmicas para demonstrar a aplicação prática de **Python** na análise de dados, consumo de APIs e automação.
+
+Aqui você encontrará projetos que envolvem:
+
+* 📊 **Data Science:** Análise e visualização de dados econômicos.
+* 🗺️ **Geolocalização:** Monitoramento em tempo real e mapas interativos.
+* 🧮 **Algoritmos:** Implementação matemática de modelos de regressão.
+
+O site foi construído utilizando [Quarto](https://quarto.org/), integrando código e narrativa em um único lugar.
+
+Sinta-se à vontade para explorar os posts e entrar em contato!
